@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  nginx:
+    build:
+      context: docker/nginx
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/var/www/app
+    ports:
+      - 8805:80
+    depends_on:
+      - clo-php
+
+  clo-php:
+    build:
+      context: ./docker/php-fpm
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/var/www/app
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      PHP_IDE_CONFIG: serverName=iliya-clo
