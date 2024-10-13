@@ -14,8 +14,7 @@ class ProxyCheckHandler extends AbstractCheckHandler
 {
     public function __construct(
         private ProxyDetectorInterface $proxyDetector,
-    )
-    {
+    ) {
     }
 
     public function handle(Command $command): Response

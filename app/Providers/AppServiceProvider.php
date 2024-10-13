@@ -80,7 +80,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(BlackboxIpDetectorClient::class, function (Application $app) {
             return new BlackboxIpDetectorClient(
-                $app->get(ProxyClientInterface::class)
+                $app->get(ClientInterface::class)
             );
         });
         $this->app->singleton(UriShouldContainCheckHandler::class, function (Application $app) {

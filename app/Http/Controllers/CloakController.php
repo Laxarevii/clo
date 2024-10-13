@@ -15,15 +15,15 @@ use Illuminate\Http\Request;
 class CloakController extends Controller
 {
     /**
-     * @param CommandHandler $CommandHandler
+     * @param CommandHandler $commandHandler
      */
-    public function __construct(protected CommandHandlerInterface $CommandHandler)
+    public function __construct(protected CommandHandlerInterface $commandHandler)
     {
     }
 
     public function resolve(Request $request): \Illuminate\Http\JsonResponse
     {
-        $result = $this->CommandHandler->handle(
+        $result = $this->commandHandler->handle(
             new Command(
                 $this->getAcceptLanguage($request),
                 $this->getUserAgent($request),
@@ -33,7 +33,7 @@ class CloakController extends Controller
             )
         );
 
-        return response()->json(['status' => $result->getStatus(), 'message'=> $result->getMessage()]);
+        return response()->json(['status' => $result->getStatus(), 'message' => $result->getMessage()]);
     }
 
     private function getAcceptLanguage(Request $request): AcceptLanguage
@@ -60,6 +60,6 @@ class CloakController extends Controller
 
     private function getUri(Request $request): Uri
     {
-       return new Uri($request->getRequestUri());
+        return new Uri($request->getRequestUri());
     }
 }

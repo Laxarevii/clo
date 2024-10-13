@@ -1,10 +1,9 @@
 <?xml version="1.0"?>
 <ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="PHP_CodeSniffer" xsi:noNamespaceSchemaLocation="phpcs.xsd">
 
-    <file>bin</file>
     <file>config</file>
-    <file>src</file>
-    <file>test</file>
+    <file>app</file>
+    <file>tests</file>
 
     <arg name="colors"/>
     <arg name="cache" value="storage/framework/cache/.phpcs"/>

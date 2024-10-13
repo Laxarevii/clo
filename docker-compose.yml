@@ -7,7 +7,7 @@ services:
     volumes:
       - ./:/var/www/app
     ports:
-      - 8805:80
+      - "8805:80"
     depends_on:
       - clo-php
 
