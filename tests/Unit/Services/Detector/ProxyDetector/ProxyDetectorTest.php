@@ -3,7 +3,7 @@
 namespace Tests\Unit\Services\Detector\ProxyDetector;
 
 use App\Common\DTO\Ip;
-use App\Services\Client\ProxyClientInterface;
+use App\Services\Detector\ProxyDetector\Client\ProxyClientInterface;
 use App\Services\Detector\ProxyDetector\ProxyDetector;
 use PHPUnit\Framework\TestCase;
 

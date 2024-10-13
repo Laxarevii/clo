@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\Client;
+namespace App\Services\Detector\ProxyDetector\Client;
 
 use App\Common\DTO\Ip;
-use Psr\Http\Client\ClientInterface;
+use GuzzleHttp\ClientInterface;
 
 class BlackboxIpDetectorClient implements ProxyClientInterface
 {
@@ -17,7 +17,7 @@ class BlackboxIpDetectorClient implements ProxyClientInterface
     {
         $url = $this->url . $ip->getValue();
         $res = $this->client->request('GET', $url);
-        $res = (string)$res->getBody();
+        $res = $res->getBody()->getContents();
 
         return $res === 'Y';
     }

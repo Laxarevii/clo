@@ -15,17 +15,17 @@ use App\Command\Resolve\Handler\WithOutRefererCheckHandler;
 
 return [
     'chain_handlers' => [
-//        BotCheckHandler::class,
-//        OsCheckHandler::class,
-//        IpCheckHandler::class,
+        BotCheckHandler::class,
+        OsCheckHandler::class,
+        IpCheckHandler::class,
         ProxyCheckHandler::class,
-//        WithOutRefererCheckHandler::class,
-//        StopWordsRefererCheckHandler::class,
-//        IspCheckHandler::class,
-//        LanguageCheckHandler::class,
-//        CountryCheckHandler::class,
-//        UriShouldContainCheckHandler::class,
-//        UriStopWordCheckHandler::class,
-//        UserAgentCheckHandler::class,
+        WithOutRefererCheckHandler::class,
+        StopWordsRefererCheckHandler::class,
+        IspCheckHandler::class,
+        LanguageCheckHandler::class,
+        CountryCheckHandler::class,
+        UriShouldContainCheckHandler::class,
+        UriStopWordCheckHandler::class,
+        UserAgentCheckHandler::class,
     ],
 ];

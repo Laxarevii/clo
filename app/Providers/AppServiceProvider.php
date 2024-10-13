@@ -2,25 +2,21 @@
 
 namespace App\Providers;
 
+use App\Command\Resolve\CommandHandler;
 use App\Command\Resolve\Factory\CheckHandlerFactory;
-use App\Command\Resolve\Factory\CommandHandlerFactory;
+use App\Command\Resolve\Handler\BlockWithOutRefererCheckHandler;
 use App\Command\Resolve\Handler\CountryCheckHandler;
 use App\Command\Resolve\Handler\IspCheckHandler;
 use App\Command\Resolve\Handler\LanguageCheckHandler;
-use App\Command\Resolve\Handler\StopWordsRefererCheckHandler;
-use App\Command\Resolve\Handler\BlockWithOutRefererCheckHandler;
 use App\Command\Resolve\Handler\OsCheckHandler;
+use App\Command\Resolve\Handler\StopWordsRefererCheckHandler;
 use App\Command\Resolve\Handler\UriShouldContainCheckHandler;
 use App\Command\Resolve\Handler\UriStopWordCheckHandler;
 use App\Command\Resolve\Handler\WithOutRefererCheckHandler;
-use App\Command\Resolve\Interface\CheckHandlerInterface;
 use App\Command\Resolve\Interface\CommandHandlerInterface;
-use App\Command\Resolve\CommandHandler;
 use App\Config\Config;
 use App\Services\Checker\UserAgentChecker\UserAgentChecker;
 use App\Services\Checker\UserAgentChecker\UserAgentCheckerInterface;
-use App\Services\Client\BlackboxIpDetectorClient;
-use App\Services\Client\ProxyClientInterface;
 use App\Services\Cloaker\Cloaker;
 use App\Services\Cloaker\CloakerInterface;
 use App\Services\Detector\BlockedIpDetector\BlockedIpDetectorInterface;
@@ -35,6 +31,8 @@ use App\Services\Detector\LanguageDetector\LanguageDetector;
 use App\Services\Detector\LanguageDetector\LanguageDetectorInterface;
 use App\Services\Detector\OsDetector\OsDetector;
 use App\Services\Detector\OsDetector\OsDetectorInterface;
+use App\Services\Detector\ProxyDetector\Client\BlackboxIpDetectorClient;
+use App\Services\Detector\ProxyDetector\Client\ProxyClientInterface;
 use App\Services\Detector\ProxyDetector\ProxyDetector;
 use App\Services\Detector\ProxyDetector\ProxyDetectorInterface;
 use GeoIp2\Database\Reader;

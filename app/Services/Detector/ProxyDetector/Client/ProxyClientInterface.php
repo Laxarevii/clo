@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Client;
+namespace App\Services\Detector\ProxyDetector\Client;
 
 use App\Common\DTO\Ip;
 
