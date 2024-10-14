@@ -6,5 +6,5 @@ use App\Common\DTO\Ip;
 
 interface ProxyClientInterface
 {
-    public function isUsingProxy(Ip $ip);
+    public function isUsingProxy(Ip $ip): bool;
 }

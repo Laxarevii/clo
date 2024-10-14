@@ -26,20 +26,21 @@ class OsDetector implements OsDetectorInterface
 
     private function isChromeOs(UserAgent $userAgent): bool
     {
-        return stripos($userAgent->getValue(), ' CrOS')
-            || stripos($userAgent->getValue(), 'CrOS ');
+        return stripos($userAgent->getValue(), ' CrOS') !== false
+            || stripos($userAgent->getValue(), 'CrOS ') !== false;
     }
 
     private function isIOS(UserAgent $userAgent): bool
     {
         $userAgentValue = $userAgent->getValue();
-        return stripos($userAgentValue, 'CPU OS') ||
-            stripos($userAgentValue, 'iPhone OS') &&
-            stripos($userAgentValue, 'OS X');
+        return (
+                stripos($userAgentValue, 'CPU OS') !== false ||
+                stripos($userAgentValue, 'iPhone OS') !== false
+            ) && stripos($userAgentValue, 'OS X') === false;
     }
 
     private function isOSX(UserAgent $userAgent): bool
     {
-        return stripos($userAgent->getValue(), 'OS X');
+        return stripos($userAgent->getValue(), 'OS X') !== false;
     }
 }
