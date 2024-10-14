@@ -37,6 +37,7 @@ use GuzzleHttp\Client;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Psr\Http\Client\ClientInterface;
+use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -57,7 +58,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(Config::class, function (Application $app) {
+        $this->app->singleton(Config::class, function () {
             $json = file_get_contents(base_path('config/settings.json'));
 
             if ($json === false) {
@@ -86,8 +87,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProxyClientInterface::class, BlackboxIpDetectorClient::class);
 
         $this->app->singleton(BlackboxIpDetectorClient::class, function (Application $app) {
+            /** @var GuzzleClientInterface $client */
+            $client = $app->get(ClientInterface::class);
             return new BlackboxIpDetectorClient(
-                $app->get(ClientInterface::class)
+                $client
             );
         });
         $this->app->singleton(UriShouldContainCheckHandler::class, function (Application $app) {
@@ -129,9 +132,8 @@ class AppServiceProvider extends ServiceProvider
             $config = $app->get(Config::class);
 
             /** @var array<string> $uriWords */
-            $uriWords = $config->get('tds.filters.blocked.uriWords', []);
+            $uriWords = $config->get('tds')['filters']['blocked']['uriWords'] ?? [];
 
-            // Ensure that $uriWords is an array
             if (!is_array($uriWords)) {
                 throw new \InvalidArgumentException('uriWords must be an array');
             }
@@ -262,13 +264,14 @@ class AppServiceProvider extends ServiceProvider
             return new UserAgentChecker($userAgents);
         });
 
-
         $this->app->singleton(FileBlockedIpDetector::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
-            $filePath = $config->get('tds.filters.blocked.ips.filePath');
 
-            if (!is_string($filePath) || empty($filePath)) {
+            /** @var string $filePath */
+            $filePath = $config->get('tds')['filters']['blocked']['ips']['filePath'] ?? '';
+
+            if (empty($filePath)) {
                 throw new \InvalidArgumentException('Expected filePath to be a non-empty string');
             }
 
@@ -276,6 +279,7 @@ class AppServiceProvider extends ServiceProvider
 
             return new FileBlockedIpDetector($path);
         });
+
 
         $this->app->singleton(FileBotDetector::class, function () {
             $filePath = config('services.detectors.fileBotDetector.filePath');
