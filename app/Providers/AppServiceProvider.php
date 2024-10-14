@@ -134,10 +134,6 @@ class AppServiceProvider extends ServiceProvider
             /** @var array<string> $uriWords */
             $uriWords = $config->get('tds')['filters']['blocked']['uriWords'] ?? [];
 
-            if (!is_array($uriWords)) {
-                throw new \InvalidArgumentException('uriWords must be an array');
-            }
-
             return new UriStopWordCheckHandler($uriWords);
         });
 
@@ -159,12 +155,6 @@ class AppServiceProvider extends ServiceProvider
 
             /** @var array<string> $languages */
             $languages = $config->get('tds.filters.allowed.languages', []);
-
-            if (!is_array($languages)) {
-                $languages = [];
-            } else {
-                throw new \InvalidArgumentException('Languages must be an array');
-            }
 
             return new LanguageCheckHandler($languages, $languageDetector);
         });
@@ -250,16 +240,6 @@ class AppServiceProvider extends ServiceProvider
 
             /** @var array<string> $userAgents */
             $userAgents = $config->get('tds')['filters']['blocked']['userAgents'] ?? [];
-
-            if (!is_array($userAgents)) {
-                throw new \InvalidArgumentException('Expected user agents to be an array');
-            }
-
-            foreach ($userAgents as $agent) {
-                if (!is_string($agent)) {
-                    throw new \InvalidArgumentException('Expected all user agents to be strings');
-                }
-            }
 
             return new UserAgentChecker($userAgents);
         });
