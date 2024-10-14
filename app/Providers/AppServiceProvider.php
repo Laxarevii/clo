@@ -81,12 +81,17 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(UriShouldContainCheckHandler::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
+
             /** @var array<string> $words */
             $words = $config->get('tds')['filters']['allowed']['wordsInUri'];
-            return new UriShouldContainCheckHandler(
-                $words,
-            );
+
+            if (!is_array($words)) {
+                throw new \InvalidArgumentException('Expected wordsInUri to be an array');
+            }
+
+            return new UriShouldContainCheckHandler($words);
         });
+
         $this->app->singleton(UriStopWordCheckHandler::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
@@ -209,14 +214,21 @@ class AppServiceProvider extends ServiceProvider
             /** @var Config $config */
             $config = $app->get(Config::class);
             /** @var array<string> $userAgents */
-            $userAgents = $config->get('tds.filters.blocked.useragents', []);
+            $userAgents = $config->get('tds.filters.blocked.userAgents', []);
 
             if (!is_array($userAgents)) {
-                throw new \InvalidArgumentException('Expected useragents to be an array');
+                throw new \InvalidArgumentException('Expected user agents to be an array');
+            }
+
+            foreach ($userAgents as $agent) {
+                if (!is_string($agent)) {
+                    throw new \InvalidArgumentException('Expected all user agents to be strings');
+                }
             }
 
             return new UserAgentChecker($userAgents);
         });
+
 
         $this->app->singleton(FileBlockedIpDetector::class, function (Application $app) {
             /** @var Config $config */
