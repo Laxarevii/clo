@@ -94,15 +94,35 @@ class AppServiceProvider extends ServiceProvider
             /** @var Config $config */
             $config = $app->get(Config::class);
 
-            /** @var array<string> $words */
-            $words = $config->get('tds')['filters']['allowed']['wordsInUri'];
+            // Get the 'tds' configuration
+            $tdsConfig = $config->get('tds', []);
 
+            // Ensure that 'tds' config is an array
+            if (!is_array($tdsConfig)) {
+                throw new \InvalidArgumentException('Expected tds configuration to be an array');
+            }
+
+            // Access the filters and ensure it is an array
+            $filters = $tdsConfig['filters'] ?? [];
+            if (!is_array($filters)) {
+                throw new \InvalidArgumentException('Expected filters configuration to be an array');
+            }
+
+            // Access the allowed words
+            $allowed = $filters['allowed'] ?? [];
+            if (!is_array($allowed)) {
+                throw new \InvalidArgumentException('Expected allowed filters configuration to be an array');
+            }
+
+            // Get the wordsInUri and ensure it's an array
+            $words = $allowed['wordsInUri'] ?? [];
             if (!is_array($words)) {
                 throw new \InvalidArgumentException('Expected wordsInUri to be an array');
             }
 
             return new UriShouldContainCheckHandler($words);
         });
+
 
         $this->app->singleton(UriStopWordCheckHandler::class, function (Application $app) {
             /** @var Config $config */
