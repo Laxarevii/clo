@@ -58,9 +58,21 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(Config::class, function (Application $app) {
-            $settings = json_decode(file_get_contents(base_path('config/settings.json')), true);
+            $json = file_get_contents(base_path('config/settings.json'));
+
+            if ($json === false) {
+                throw new \RuntimeException('Failed to read the settings file');
+            }
+
+            $settings = json_decode($json, true);
+
+            if (!is_array($settings)) {
+                throw new \RuntimeException('Settings file must return a valid JSON array');
+            }
+
             return new Config($settings);
         });
+
         $this->app->bind(LanguageDetectorInterface::class, LanguageDetector::class);
         $this->app->bind(OsDetectorInterface::class, OsDetector::class);
         $this->app->bind(CommandHandlerInterface::class, CommandHandler::class);
