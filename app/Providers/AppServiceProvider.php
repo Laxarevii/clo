@@ -176,7 +176,7 @@ class AppServiceProvider extends ServiceProvider
             $path = base_path() . $config->get('tds')['filters']['blocked']['ips']['filePath'];
             return new FileBlockedIpDetector($path);
         });
-        $this->app->singleton(FileBotDetector::class, function ($app) {
+        $this->app->singleton(FileBotDetector::class, function () {
             $filePath = config('services.detectors.fileBotDetector.filePath');
 
             if (!is_string($filePath) || empty($filePath)) {
@@ -193,7 +193,7 @@ class AppServiceProvider extends ServiceProvider
                 throw new \InvalidArgumentException('Expected configuration data to be an array');
             }
 
-            $handlers = array_map(function ($class) use ($app) {
+            $handlers = array_map(function ($class) use ($app): mixed {
                 if (!is_string($class)) {
                     throw new \InvalidArgumentException('Expected class to be a string');
                 }
