@@ -12,8 +12,7 @@ class IpCheckHandler extends AbstractCheckHandler
 {
     public function __construct(
         private BlockedIpDetectorInterface $blockedIpDetector,
-    )
-    {
+    ) {
     }
 
     public function handle(Command $command): Response

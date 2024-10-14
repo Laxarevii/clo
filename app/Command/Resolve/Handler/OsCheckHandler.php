@@ -14,8 +14,7 @@ class OsCheckHandler extends AbstractCheckHandler
     public function __construct(
         private array $allowedOses,
         private OsDetectorInterface $osDetector,
-    )
-    {
+    ) {
     }
 
     public function handle(Command $command): Response

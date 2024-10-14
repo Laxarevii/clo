@@ -17,8 +17,7 @@ class IspCheckHandler extends AbstractCheckHandler
     public function __construct(
         private array $blockedIsps,
         private IspDetectorInterface $ispDetector,
-    )
-    {
+    ) {
     }
 
     public function handle(Command $command): Response

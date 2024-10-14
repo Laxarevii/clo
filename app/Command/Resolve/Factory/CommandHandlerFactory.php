@@ -8,7 +8,9 @@ use App\Command\Resolve\Interface\CommandHandlerInterface;
 
 class CommandHandlerFactory
 {
-    public function __construct(private CheckHandlerInterface $checkHandler) {}
+    public function __construct(private CheckHandlerInterface $checkHandler)
+    {
+    }
 
     public function create(): CommandHandlerInterface
     {

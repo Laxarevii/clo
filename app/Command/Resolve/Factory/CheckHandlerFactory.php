@@ -7,7 +7,9 @@ use App\Config\Config;
 
 class CheckHandlerFactory
 {
-    public function __construct(private array $handlers) {}
+    public function __construct(private array $handlers)
+    {
+    }
 
     public function create(array $handlers): CheckHandlerInterface
     {

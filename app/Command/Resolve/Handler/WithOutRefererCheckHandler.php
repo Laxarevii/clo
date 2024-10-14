@@ -27,4 +27,3 @@ class WithOutRefererCheckHandler extends AbstractCheckHandler
         return $this->nextHandler ? $this->nextHandler->handle($command) : new SuccessResponse();
     }
 }
-

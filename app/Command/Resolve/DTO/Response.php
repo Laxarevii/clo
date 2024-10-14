@@ -19,5 +19,4 @@ abstract class Response implements ResponseInterface
     {
         return $this->message;
     }
-
 }

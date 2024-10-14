@@ -1,7 +1,6 @@
 <?php
 
 namespace Tests\Unit\Command\Resolve\Handler;
-
 namespace Tests\Unit\Command\Resolve\Handler;
 
 use App\Command\Resolve\Command;

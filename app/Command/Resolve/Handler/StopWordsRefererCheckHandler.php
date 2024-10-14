@@ -40,4 +40,3 @@ class StopWordsRefererCheckHandler extends AbstractCheckHandler
         return false;
     }
 }
-

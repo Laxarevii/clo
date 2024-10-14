@@ -3,7 +3,6 @@
 namespace Tests\Unit\Services\Detector\CountryDetector;
 
 use App\Common\DTO\Country;
-
 use App\Common\DTO\Ip;
 use App\Services\Detector\CountryDetector\CountryDetector;
 use GeoIp2\Exception\AddressNotFoundException;

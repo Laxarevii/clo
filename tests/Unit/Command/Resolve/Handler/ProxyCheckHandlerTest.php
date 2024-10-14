@@ -46,4 +46,3 @@ class ProxyCheckHandlerTest extends TestCase
         $this->assertInstanceOf(SuccessResponse::class, $response);
     }
 }
-

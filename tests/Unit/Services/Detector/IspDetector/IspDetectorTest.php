@@ -9,6 +9,7 @@ use GeoIp2\Database\Reader;
 use GeoIp2\Exception\AddressNotFoundException;
 use GeoIp2\Model\Asn;
 use PHPUnit\Framework\TestCase;
+
 class IspDetectorTest extends TestCase
 {
     private IspDetector $detector;

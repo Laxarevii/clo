@@ -14,8 +14,7 @@ class BotCheckHandler extends AbstractCheckHandler
 {
     public function __construct(
         private BotDetectorInterface $botDetector,
-    )
-    {
+    ) {
     }
 
     public function handle(Command $command): Response

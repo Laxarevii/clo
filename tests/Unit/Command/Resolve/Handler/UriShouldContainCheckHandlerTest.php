@@ -49,4 +49,3 @@ class UriShouldContainCheckHandlerTest extends TestCase
         $this->assertInstanceOf(SuccessResponse::class, $response);
     }
 }
-

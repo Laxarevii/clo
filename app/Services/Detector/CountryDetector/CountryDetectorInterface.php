@@ -2,7 +2,6 @@
 
 namespace App\Services\Detector\CountryDetector;
 
-
 use App\Common\DTO\Country;
 use App\Common\DTO\Ip;
 

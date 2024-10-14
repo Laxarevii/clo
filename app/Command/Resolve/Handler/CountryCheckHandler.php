@@ -16,8 +16,7 @@ class CountryCheckHandler extends AbstractCheckHandler
     public function __construct(
         private array $allowedCountryCodes,
         private CountryDetectorInterface $countryDetector,
-    )
-    {
+    ) {
     }
 
     public function handle(Command $command): Response

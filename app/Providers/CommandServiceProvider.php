@@ -20,8 +20,6 @@ class CommandServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(IspDetectorInterface::class, IspDetector::class);
-
-
     }
 
     /**
