@@ -95,17 +95,18 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(UriStopWordCheckHandler::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
-            /** @var array<string> $stopWords */
-            $uriWords = $config->get('tds')['filters']['blocked']['uriWords'];
+
+            /** @var array<string> $uriWords */
+            $uriWords = $config->get('tds.filters.blocked.uriWords', []);
+
+            // Ensure that $uriWords is an array
             if (!is_array($uriWords)) {
-                $uriWords = [];
-            } else {
                 throw new \InvalidArgumentException('uriWords must be an array');
             }
-            return new UriStopWordCheckHandler(
-                $uriWords
-            );
+
+            return new UriStopWordCheckHandler($uriWords);
         });
+
         $this->app->singleton(StopWordsRefererCheckHandler::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
