@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Command\Resolve\CommandHandler;
 use App\Command\Resolve\Factory\CheckHandlerFactory;
-use App\Command\Resolve\Handler\BlockWithOutRefererCheckHandler;
 use App\Command\Resolve\Handler\CountryCheckHandler;
 use App\Command\Resolve\Handler\IspCheckHandler;
 use App\Command\Resolve\Handler\LanguageCheckHandler;
@@ -17,8 +16,6 @@ use App\Command\Resolve\Interface\CommandHandlerInterface;
 use App\Config\Config;
 use App\Services\Checker\UserAgentChecker\UserAgentChecker;
 use App\Services\Checker\UserAgentChecker\UserAgentCheckerInterface;
-use App\Services\Cloaker\Cloaker;
-use App\Services\Cloaker\CloakerInterface;
 use App\Services\Detector\BlockedIpDetector\BlockedIpDetectorInterface;
 use App\Services\Detector\BlockedIpDetector\FileBlockedIpDetector;
 use App\Services\Detector\BotDetector\BotDetectorInterface;
@@ -120,10 +117,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(IspCheckHandler::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
-            return new IspCheckHandler(
-                $config->get('tds')['filters']['blocked']['isps'],
-                $app->get(IspDetectorInterface::class),
-            );
+            $isps = $config->get('tds')['filters']['blocked']['isps'] ?? [];
+
+            if (!is_array($isps)) {
+                throw new \UnexpectedValueException('Blocked ISPs must be an array.');
+            }
+
+            return new IspCheckHandler($isps, $app->get(IspDetectorInterface::class));
         });
 
         $this->app->singleton('IspDetectorService', function (Application $app) {
@@ -149,10 +149,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(CountryCheckHandler::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
-            return new CountryCheckHandler(
-                $config->get('tds')['filters']['allowed']['countries'] ?? [],
-                $app->get(CountryDetectorInterface::class)
-            );
+            $countries = $config->get('tds')['filters']['allowed']['countries'] ?? [];
+
+            if (!is_array($countries)) {
+                throw new \UnexpectedValueException('Allowed countries must be an array.');
+            }
+
+            return new CountryCheckHandler($countries, $app->get(CountryDetectorInterface::class));
         });
         $this->app->singleton(OsCheckHandler::class, function (Application $app) {
             /** @var Config $config */
@@ -175,11 +178,28 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->app->singleton(FileBotDetector::class, function ($app) {
             $filePath = config('services.detectors.fileBotDetector.filePath');
+
+            if (!is_string($filePath) || empty($filePath)) {
+                throw new \InvalidArgumentException('Expected filePath to be a non-empty string');
+            }
+
             return new FileBotDetector($filePath);
         });
-        $this->app->singleton(CommandHandler::class, function ($app) {
+
+        $this->app->singleton(CommandHandler::class, function (Application $app): CommandHandler {
             $configData = config('chainHandlersList.chain_handlers');
-            $handlers = array_map(fn($class) => $app->make($class), $configData);
+
+            if (!is_array($configData)) {
+                throw new \InvalidArgumentException('Expected configuration data to be an array');
+            }
+
+            $handlers = array_map(function ($class) use ($app) {
+                if (!is_string($class)) {
+                    throw new \InvalidArgumentException('Expected class to be a string');
+                }
+                return $app->make($class);
+            }, $configData);
+
             $checkHandlerFactory = new CheckHandlerFactory($configData);
             $checkHandler = $checkHandlerFactory->create($handlers);
 
