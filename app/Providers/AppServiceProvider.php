@@ -102,18 +102,21 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(LanguageCheckHandler::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
+            /** @var LanguageDetectorInterface $languageDetector */
+            $languageDetector = $app->get(LanguageDetectorInterface::class);
             return new LanguageCheckHandler(
                 $config->get('tds')['filters']['allowed']['languages'] ?? [],
-                $app->get(LanguageDetectorInterface::class)
+                $languageDetector
             );
         });
         $this->app->singleton(WithOutRefererCheckHandler::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
             return new WithOutRefererCheckHandler(
-                $config->get('tds')['filters']['blocked']['referer']['empty'],
+                (bool)$config->get('tds.filters.blocked.referer.empty', false)
             );
         });
+
         $this->app->singleton(IspCheckHandler::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
@@ -123,22 +126,27 @@ class AppServiceProvider extends ServiceProvider
                 throw new \UnexpectedValueException('Blocked ISPs must be an array.');
             }
 
-            return new IspCheckHandler($isps, $app->get(IspDetectorInterface::class));
+            /** @var IspDetectorInterface $service */
+            $service = $app->get(IspDetectorInterface::class);
+
+            return new IspCheckHandler($isps, $service);
         });
 
-        $this->app->singleton('IspDetectorService', function (Application $app) {
+        $this->app->singleton('IspDetectorService', function () {
             return new Reader(
                 config_path() . '/locationDetector/asn.mmdb'
             );
         });
-        $this->app->singleton('CountryDetectorService', function (Application $app) {
+        $this->app->singleton('CountryDetectorService', function () {
             return new Reader(
                 config_path() . '/locationDetector/country.mmdb'
             );
         });
         $this->app->singleton(CountryDetector::class, function (Application $app) {
+            /** @var Reader $service */
+            $service = $app->get('CountryDetectorService');
             return new CountryDetector(
-                $app->get('CountryDetectorService')
+                $service
             );
         });
         $this->app->singleton(IspDetector::class, function (Application $app) {
