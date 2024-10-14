@@ -142,8 +142,10 @@ class AppServiceProvider extends ServiceProvider
             );
         });
         $this->app->singleton(IspDetector::class, function (Application $app) {
+            /** @var Reader $service */
+            $service = $app->get('IspDetectorService');
             return new IspDetector(
-                $app->get('IspDetectorService')
+                $service
             );
         });
         $this->app->singleton(CountryCheckHandler::class, function (Application $app) {
@@ -154,23 +156,45 @@ class AppServiceProvider extends ServiceProvider
             if (!is_array($countries)) {
                 throw new \UnexpectedValueException('Allowed countries must be an array.');
             }
-
-            return new CountryCheckHandler($countries, $app->get(CountryDetectorInterface::class));
+            /** @var CountryDetectorInterface $countryDetector */
+            $countryDetector = $app->get(CountryDetectorInterface::class);
+            return new CountryCheckHandler($countries, $countryDetector);
         });
+
         $this->app->singleton(OsCheckHandler::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
-            return new OsCheckHandler(
-                $config->get('tds')['filters']['allowed']['os'] ?? [],
-                $app->get(OsDetectorInterface::class)
-            );
+            /** @var OsDetectorInterface $osDetector */
+            $osDetector = $app->get(OsDetectorInterface::class);
+
+            $osFilters = $config->get('tds.filters.allowed.os', []);
+
+            if (!is_array($osFilters)) {
+                throw new \InvalidArgumentException('Expected OS filters to be an array');
+            }
+
+            return new OsCheckHandler($osFilters, $osDetector);
         });
+
+
         $this->app->singleton(UserAgentChecker::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
-            return new UserAgentChecker($config->get('tds')['filters']['blocked']['useragents']);
-        });
 
+            $userAgents = $config->get('tds.filters.blocked.useragents', []);
+
+            if (!is_array($userAgents)) {
+                throw new \InvalidArgumentException('Expected useragents to be an array');
+            }
+
+            foreach ($userAgents as $agent) {
+                if (!is_string($agent)) {
+                    throw new \InvalidArgumentException('Expected all useragents to be strings');
+                }
+            }
+
+            return new UserAgentChecker($userAgents);
+        });
         $this->app->singleton(FileBlockedIpDetector::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
