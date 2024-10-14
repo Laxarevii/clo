@@ -8,7 +8,12 @@ class Config
     {
     }
 
-    public function get($key, $default = null)
+    /**
+     * @param string $key
+     * @param mixed|null $default
+     * @return mixed|null
+     */
+    public function get(string $key, mixed $default = null): mixed
     {
         return $this->settings[$key] ?? $default;
     }

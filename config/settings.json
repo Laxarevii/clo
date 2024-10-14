@@ -163,7 +163,7 @@
                 ],
                 "referer": {
                     "empty": false,
-                    "stopwords": [
+                    "stopWords": [
                         "facebook"
                     ]
                 },

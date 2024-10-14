@@ -20,7 +20,6 @@ class LanguageCheckHandler extends AbstractCheckHandler
         private LanguageDetectorInterface $languageDetector,
     ) {
     }
-
     public function handle(Command $command): Response
     {
         $userLanguage = $this->languageDetector->detect($command->getAcceptLanguage());

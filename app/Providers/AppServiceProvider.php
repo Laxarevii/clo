@@ -95,8 +95,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(StopWordsRefererCheckHandler::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
+            /** @var array<string>  $stopWords */
+            $stopWords = $config->get('tds')['filters']['blocked']['referer']['stopWords'];
             return new StopWordsRefererCheckHandler(
-                $config->get('tds')['filters']['blocked']['referer']['stopwords'],
+                $stopWords
             );
         });
         $this->app->singleton(LanguageCheckHandler::class, function (Application $app) {
@@ -104,11 +106,17 @@ class AppServiceProvider extends ServiceProvider
             $config = $app->get(Config::class);
             /** @var LanguageDetectorInterface $languageDetector */
             $languageDetector = $app->get(LanguageDetectorInterface::class);
-            return new LanguageCheckHandler(
-                $config->get('tds')['filters']['allowed']['languages'] ?? [],
-                $languageDetector
-            );
+
+            /** @var array<string> $languages */
+            $languages = $config->get('tds.filters.allowed.languages', []);
+
+            if (!is_array($languages)) {
+                $languages = [];
+            }
+
+            return new LanguageCheckHandler($languages, $languageDetector);
         });
+
         $this->app->singleton(WithOutRefererCheckHandler::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
