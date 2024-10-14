@@ -9,7 +9,10 @@ use App\Common\DTO\AcceptLanguage;
 use App\Common\DTO\Ip;
 use App\Common\DTO\Referer;
 use App\Common\DTO\UserAgent;
+use App\Exceptions\NoAcceptLanguageException;
+use App\Exceptions\NoUserAgentException;
 use GuzzleHttp\Psr7\Uri;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CloakController extends Controller
@@ -21,7 +24,7 @@ class CloakController extends Controller
     {
     }
 
-    public function resolve(Request $request): \Illuminate\Http\JsonResponse
+    public function resolve(Request $request): JsonResponse
     {
         $result = $this->commandHandler->handle(
             new Command(
@@ -33,24 +36,42 @@ class CloakController extends Controller
             )
         );
 
-        return response()->json(['status' => $result->getStatus(), 'message' => $result->getMessage()]);
+        /** @var JsonResponse $response */
+        $response = response();
+        return $r = response()->json(['status' => $result->getStatus(), 'message' => $result->getMessage()]);
     }
 
     private function getAcceptLanguage(Request $request): AcceptLanguage
     {
-        return new AcceptLanguage($request->header('Accept-Language'));
+        $acceptLanguage = $request->header('Accept-Language');
+
+        if (!is_string($acceptLanguage)) {
+            throw new NoAcceptLanguageException();
+        }
+
+        return new AcceptLanguage($acceptLanguage);
     }
+
 
     private function getUserAgent(Request $request): UserAgent
     {
-        return new UserAgent($request->header('User-Agent'));
+        $userAgent = $request->header('User-Agent');
+
+        if (!is_string($userAgent)) {
+            throw new NoUserAgentException();
+        }
+
+        return new UserAgent($userAgent);
     }
 
+
+    /** @psalm-suppress UnusedParam */
     private function getIp(Request $request): Ip
     {
         //TODO refactor
+
         return new Ip('89.209.161.249');
-        return new Ip($request->ip());
+//        return new Ip($request->ip());
     }
 
     private function getReferer(Request $request): Referer

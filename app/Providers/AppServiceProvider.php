@@ -141,7 +141,8 @@ class AppServiceProvider extends ServiceProvider
             /** @var Config $config */
             $config = $app->get(Config::class);
             /** @var array<string> $stopWords */
-            $stopWords = $config->get('tds.filters.blocked.referer.stopWords', []);
+            $stopWords = $config->get('tds')['filters']['blocked']['referer']['stopWords'] ?? [];
+
             return new StopWordsRefererCheckHandler(
                 $stopWords
             );
@@ -154,7 +155,7 @@ class AppServiceProvider extends ServiceProvider
             $languageDetector = $app->get(LanguageDetectorInterface::class);
 
             /** @var array<string> $languages */
-            $languages = $config->get('tds.filters.allowed.languages', []);
+            $languages = $config->get('tds')['filters']['allowed']['languages'] ?? [];
 
             return new LanguageCheckHandler($languages, $languageDetector);
         });
@@ -163,7 +164,7 @@ class AppServiceProvider extends ServiceProvider
             /** @var Config $config */
             $config = $app->get(Config::class);
             return new WithOutRefererCheckHandler(
-                (bool)$config->get('tds.filters.blocked.referer.empty', false)
+                (bool)$config->get('tds', false)['filters']['blocked']['referer']['empty'],
             );
         });
 
@@ -225,7 +226,7 @@ class AppServiceProvider extends ServiceProvider
             /** @var OsDetectorInterface $osDetector */
             $osDetector = $app->get(OsDetectorInterface::class);
 
-            $osFilters = $config->get('tds.filters.allowed.os', []);
+            $osFilters = $config->get('tds')['filters']['allowed']['os'] ?? [];
 
             if (!is_array($osFilters)) {
                 throw new \InvalidArgumentException('Expected OS filters to be an array');
