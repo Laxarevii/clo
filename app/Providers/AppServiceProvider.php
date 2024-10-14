@@ -171,11 +171,18 @@ class AppServiceProvider extends ServiceProvider
             return new UserAgentChecker($config->get('tds')['filters']['blocked']['useragents']);
         });
         $this->app->singleton(FileBlockedIpDetector::class, function (Application $app) {
-            /** @var Config $config */
             $config = $app->get(Config::class);
-            $path = base_path() . $config->get('tds')['filters']['blocked']['ips']['filePath'];
+            $filePath = $config->get('tds.filters.blocked.ips.filePath', null);
+
+            if (!is_string($filePath) || empty($filePath)) {
+                throw new \InvalidArgumentException('Expected filePath to be a non-empty string');
+            }
+
+            $path = base_path() . '/' . $filePath;
+
             return new FileBlockedIpDetector($path);
         });
+
         $this->app->singleton(FileBotDetector::class, function () {
             $filePath = config('services.detectors.fileBotDetector.filePath');
 
