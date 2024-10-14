@@ -244,12 +244,12 @@ class AppServiceProvider extends ServiceProvider
             return new OsCheckHandler($osFilters, $osDetector);
         });
 
-
         $this->app->singleton(UserAgentChecker::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
+
             /** @var array<string> $userAgents */
-            $userAgents = $config->get('tds.filters.blocked.userAgents', []);
+            $userAgents = $config->get('tds')['filters']['blocked']['userAgents'] ?? [];
 
             if (!is_array($userAgents)) {
                 throw new \InvalidArgumentException('Expected user agents to be an array');
@@ -263,6 +263,7 @@ class AppServiceProvider extends ServiceProvider
 
             return new UserAgentChecker($userAgents);
         });
+
 
         $this->app->singleton(FileBlockedIpDetector::class, function (Application $app) {
             /** @var Config $config */
