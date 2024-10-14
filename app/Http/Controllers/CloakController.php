@@ -36,9 +36,10 @@ class CloakController extends Controller
             )
         );
 
-        /** @var JsonResponse $response */
+        /** @var \Illuminate\Routing\ResponseFactory $response */
         $response = response();
-        return $r = response()->json(['status' => $result->getStatus(), 'message' => $result->getMessage()]);
+
+        return $response->json(['status' => $result->getStatus(), 'message' => $result->getMessage()]);
     }
 
     private function getAcceptLanguage(Request $request): AcceptLanguage
