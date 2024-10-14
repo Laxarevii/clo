@@ -6,6 +6,9 @@ use App\Common\DTO\UserAgent;
 
 class UserAgentChecker implements UserAgentCheckerInterface
 {
+    /**
+     * @param string[] $blockedUserAgents
+     */
     public function __construct(private array $blockedUserAgents)
     {
     }
@@ -15,7 +18,7 @@ class UserAgentChecker implements UserAgentCheckerInterface
         $userAgentString = $userAgent->getValue();
 
         foreach ($this->blockedUserAgents as $blockedUserAgent) {
-            if (!empty(stristr($userAgentString, $blockedUserAgent))) {
+            if (stristr($userAgentString, $blockedUserAgent) !== false) {
                 return true;
             }
         }
