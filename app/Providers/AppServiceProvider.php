@@ -170,7 +170,9 @@ class AppServiceProvider extends ServiceProvider
             $config = $app->get(Config::class);
             return new UserAgentChecker($config->get('tds')['filters']['blocked']['useragents']);
         });
+
         $this->app->singleton(FileBlockedIpDetector::class, function (Application $app) {
+            /** @var Config $config */
             $config = $app->get(Config::class);
             $filePath = $config->get('tds.filters.blocked.ips.filePath', null);
 
