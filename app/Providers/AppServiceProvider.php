@@ -81,26 +81,36 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(UriShouldContainCheckHandler::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
+            /** @var array<string> $words */
+            $words = $config->get('tds')['filters']['allowed']['wordsInUri'];
             return new UriShouldContainCheckHandler(
-                $config->get('tds')['filters']['allowed']['wordsInUri'],
+                $words,
             );
         });
         $this->app->singleton(UriStopWordCheckHandler::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
+            /** @var array<string> $stopWords */
+            $uriWords = $config->get('tds')['filters']['blocked']['uriWords'];
+            if (!is_array($uriWords)) {
+                $uriWords = [];
+            } else {
+                throw new \InvalidArgumentException('uriWords must be an array');
+            }
             return new UriStopWordCheckHandler(
-                $config->get('tds')['filters']['blocked']['uriWords'],
+                $uriWords
             );
         });
         $this->app->singleton(StopWordsRefererCheckHandler::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
-            /** @var array<string>  $stopWords */
-            $stopWords = $config->get('tds')['filters']['blocked']['referer']['stopWords'];
+            /** @var array<string> $stopWords */
+            $stopWords = $config->get('tds.filters.blocked.referer.stopWords', []);
             return new StopWordsRefererCheckHandler(
                 $stopWords
             );
         });
+
         $this->app->singleton(LanguageCheckHandler::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
@@ -112,6 +122,8 @@ class AppServiceProvider extends ServiceProvider
 
             if (!is_array($languages)) {
                 $languages = [];
+            } else {
+                throw new \InvalidArgumentException('Languages must be an array');
             }
 
             return new LanguageCheckHandler($languages, $languageDetector);
@@ -196,25 +208,20 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(UserAgentChecker::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
-
+            /** @var array<string> $userAgents */
             $userAgents = $config->get('tds.filters.blocked.useragents', []);
 
             if (!is_array($userAgents)) {
                 throw new \InvalidArgumentException('Expected useragents to be an array');
             }
 
-            foreach ($userAgents as $agent) {
-                if (!is_string($agent)) {
-                    throw new \InvalidArgumentException('Expected all useragents to be strings');
-                }
-            }
-
             return new UserAgentChecker($userAgents);
         });
+
         $this->app->singleton(FileBlockedIpDetector::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
-            $filePath = $config->get('tds.filters.blocked.ips.filePath', null);
+            $filePath = $config->get('tds.filters.blocked.ips.filePath');
 
             if (!is_string($filePath) || empty($filePath)) {
                 throw new \InvalidArgumentException('Expected filePath to be a non-empty string');
