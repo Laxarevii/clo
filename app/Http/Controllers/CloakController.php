@@ -70,7 +70,6 @@ class CloakController extends Controller
     private function getIp(Request $request): Ip
     {
         //TODO refactor
-
         return new Ip('89.209.161.249');
 //         return new Ip($request->ip());
     }
