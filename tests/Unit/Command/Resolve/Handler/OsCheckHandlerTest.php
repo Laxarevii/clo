@@ -1,6 +1,7 @@
 <?php
 
 namespace Tests\Unit\Command\Resolve\Handler;
+
 namespace Tests\Unit\Command\Resolve\Handler;
 
 use App\Command\Resolve\Command;
@@ -20,7 +21,10 @@ class OsCheckHandlerTest extends TestCase
     private $commandMock;
     private $osMock;
     private $getUserAgent;
-    private array $allowedOses = ['Windows', 'Linux'];
+    private array $allowedOses = [
+        Os::WINDOWS,
+        Os::LINUX,
+    ];
 
     protected function setUp(): void
     {
@@ -35,8 +39,10 @@ class OsCheckHandlerTest extends TestCase
 
     public function testHandleReturnsBadResponseForForbiddenOs(): void
     {
-        $this->osMock->method('getValue')->willReturn('MacOS');
-        $this->osDetectorMock->method('detect')->with($this->commandMock->getUserAgent())->willReturn($this->osMock);
+        $this->osDetectorMock
+            ->method('detectName')
+            ->with($this->commandMock->getUserAgent())
+            ->willReturn(Os::OS_X);
 
         $handler = new OsCheckHandler($this->allowedOses, $this->osDetectorMock);
         $response = $handler->handle($this->commandMock);
@@ -47,8 +53,7 @@ class OsCheckHandlerTest extends TestCase
 
     public function testHandleDelegatesToNextHandlerForAllowedOs(): void
     {
-        $this->osMock->method('getValue')->willReturn('Windows');
-        $this->osDetectorMock->method('detect')->with($this->commandMock->getUserAgent())->willReturn($this->osMock);
+        $this->osDetectorMock->method('detectName')->with($this->commandMock->getUserAgent())->willReturn(Os::WINDOWS);
         $this->nextHandlerMock->method('handle')->with($this->commandMock)->willReturn(new SuccessResponse());
 
         $handler = new OsCheckHandler($this->allowedOses, $this->osDetectorMock);
@@ -61,8 +66,7 @@ class OsCheckHandlerTest extends TestCase
 
     public function testHandleReturnsSuccessResponseIfNoNextHandler(): void
     {
-        $this->osMock->method('getValue')->willReturn('Linux');
-        $this->osDetectorMock->method('detect')->with($this->commandMock->getUserAgent())->willReturn($this->osMock);
+        $this->osDetectorMock->method('detectName')->with($this->commandMock->getUserAgent())->willReturn(Os::LINUX);
 
         $handler = new OsCheckHandler($this->allowedOses, $this->osDetectorMock);
         $response = $handler->handle($this->commandMock);

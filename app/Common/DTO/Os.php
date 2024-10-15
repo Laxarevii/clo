@@ -4,26 +4,24 @@ namespace App\Common\DTO;
 
 class Os
 {
-    const UNKNOWN = 'unknown';
-    const OSX = 'OS X';
-    const IOS = 'iOS';
-    const SYMBOS = 'SymbOS';
-    const WINDOWS = 'Windows';
-    const ANDROID = 'Android';
-    const LINUX = 'Linux';
-    const NOKIA = 'Nokia';
-    const BLACKBERRY = 'BlackBerry';
-    const FREEBSD = 'FreeBSD';
-    const OPENBSD = 'OpenBSD';
-    const NETBSD = 'NetBSD';
-    const OPENSOLARIS = 'OpenSolaris';
-    const SUNOS = 'SunOS';
-    const OS2 = 'OS2';
-    const BEOS = 'BeOS';
-    const WINDOWS_PHONE = 'Windows Phone';
-    const CHROME_OS = 'Chrome OS';
-
-    const VERSION_UNKNOWN = 'unknown';
+    public const OS_X = 'OS X';
+    public const IOS = 'iOS';
+    public const SYMBOS = 'SymbOS';
+    public const WINDOWS = 'Windows';
+    public const ANDROID = 'Android';
+    public const LINUX = 'Linux';
+    public const NOKIA = 'Nokia';
+    public const BLACKBERRY = 'BlackBerry';
+    public const FREEBSD = 'FreeBSD';
+    public const OPENBSD = 'OpenBSD';
+    public const NETBSD = 'NetBSD';
+    public const OPENSOLARIS = 'OpenSolaris';
+    public const SUNOS = 'SunOS';
+    public const OS2 = 'OS2';
+    public const BEOS = 'BeOS';
+    public const WINDOWS_PHONE = 'Windows Phone';
+    public const CHROME_OS = 'Chrome OS';
+    public const VERSION_UNKNOWN = 'unknown';
 
     public function __construct(
         private string $value,
@@ -40,10 +38,10 @@ class Os
     {
         if (preg_match('/OS X ([\d\._]*)/i', $userAgent->getValue(), $matches)) {
             if (isset($matches[1])) {
-                return new self(self::OSX, str_replace('_', '.', $matches[1]));
+                return new self(self::OS_X, str_replace('_', '.', $matches[1]));
             }
         }
-        throw new \InvalidArgumentException(self::OSX . ' version is missing');
+        throw new \InvalidArgumentException(self::OS_X . ' version is missing');
     }
 
     public function getVersion(): string

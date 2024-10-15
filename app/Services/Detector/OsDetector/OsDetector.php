@@ -11,14 +11,12 @@ class OsDetector implements OsDetectorInterface
     /**
      * @throws \App\Exceptions\UnknownOSException
      */
-    public function detect(UserAgent $userAgent): Os
+    public function detectName(UserAgent $userAgent): string
     {
         return match (true) {
-            // Chrome OS before OS X
-            $this->isChromeOs($userAgent) => Os::createChrome($userAgent),
-            // iOS before OS X
-            $this->isIOS($userAgent) => Os::createIOS($userAgent),
-            $this->isOSX($userAgent) => Os::createOSX($userAgent),
+            $this->isChromeOs($userAgent) => Os::CHROME_OS,
+            $this->isIOS($userAgent) => Os::IOS,
+            $this->isOSX($userAgent) => Os::OS_X,
             //TODO add others
             default => throw new UnknownOSException(),
         };
@@ -36,7 +34,7 @@ class OsDetector implements OsDetectorInterface
         return (
                 stripos($userAgentValue, 'CPU OS') !== false ||
                 stripos($userAgentValue, 'iPhone OS') !== false
-            ) && stripos($userAgentValue, 'OS X') === false;
+            ) && stripos($userAgentValue, 'OS X') !== false;
     }
 
     private function isOSX(UserAgent $userAgent): bool
