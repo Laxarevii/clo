@@ -4,6 +4,8 @@ namespace App\Services\Detector\OsDetector;
 
 use App\Common\DTO\Os;
 use App\Common\DTO\UserAgent;
+use App\Exceptions\UnknownOSException;
+use App\Exceptions\UnknownOsVersionException;
 
 class ChromeOsDetector extends AbstractOsDetector
 {
@@ -21,9 +23,9 @@ class ChromeOsDetector extends AbstractOsDetector
 
     private function getVersionFromUserAgent(UserAgent $userAgent): string
     {
-        if (preg_match('/Chrome\/([\d\.]*)/i', $userAgent->getValue(), $matches) !== false) {
+        if (preg_match('/Chrome\/([\d\.]*)/i', $userAgent->getValue(), $matches) === 1) {
             return $matches[1];
         }
-        throw new \InvalidArgumentException(Os::CHROME_OS . ' version is missing');
+        throw new UnknownOsVersionException(Os::CHROME_OS . ' version is missing');
     }
 }
