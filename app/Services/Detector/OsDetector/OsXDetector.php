@@ -24,8 +24,8 @@ class OsXDetector extends AbstractOsDetector
     {
         if (
             preg_match('/OS X ([\d\._]*)/i', $userAgent->getValue(), $matches) === 1
-            && !empty($matches[1])
-        ) {
+            && !empty($matches[1]
+            )) {
             return str_replace('_', '.', $matches[1]);
         }
         throw new UnknownOsVersionException(Os::OS_X . ' version is missing');
