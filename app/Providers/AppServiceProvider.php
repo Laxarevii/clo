@@ -26,6 +26,7 @@ use App\Services\Detector\IspDetector\IspDetector;
 use App\Services\Detector\IspDetector\IspDetectorInterface;
 use App\Services\Detector\LanguageDetector\LanguageDetector;
 use App\Services\Detector\LanguageDetector\LanguageDetectorInterface;
+use App\Services\Detector\OsDetector\Factory\OsDetectorFactory;
 use App\Services\Detector\OsDetector\OsDetector;
 use App\Services\Detector\OsDetector\OsDetectorInterface;
 use App\Services\Detector\ProxyDetector\Client\BlackboxIpDetectorClient;
@@ -274,7 +275,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(CommandHandler::class, function (Application $app): CommandHandler {
-            $configData = config('chainHandlersList.chain_handlers');
+            $configData = config('chainHandlersList.chainHandlers');
 
             if (!is_array($configData)) {
                 throw new \InvalidArgumentException('Expected configuration data to be an array');
@@ -287,10 +288,30 @@ class AppServiceProvider extends ServiceProvider
                 return $app->make($class);
             }, $configData);
 
-            $checkHandlerFactory = new CheckHandlerFactory($configData);
+            $checkHandlerFactory = new CheckHandlerFactory();
             $checkHandler = $checkHandlerFactory->create($handlers);
 
             return new CommandHandler($checkHandler);
+        });
+
+        $this->app->singleton(OsDetector::class, function (Application $app): OsDetector {
+            $configData = config('chainOsDetectorsList.chainDetectors');
+
+            if (!is_array($configData)) {
+                throw new \InvalidArgumentException('Expected configuration data to be an array');
+            }
+
+            $detectors = array_map(function ($class) use ($app): mixed {
+                if (!is_string($class)) {
+                    throw new \InvalidArgumentException('Expected class to be a string');
+                }
+                return $app->make($class);
+            }, $configData);
+
+            $detectorsFactory = new OsDetectorFactory();
+            $detector = $detectorsFactory->create($detectors);
+
+            return new OsDetector($detector);
         });
     }
 

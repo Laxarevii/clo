@@ -12,20 +12,16 @@ use App\Command\Resolve\Handler\UriShouldContainCheckHandler;
 use App\Command\Resolve\Handler\UriStopWordCheckHandler;
 use App\Command\Resolve\Handler\UserAgentCheckHandler;
 use App\Command\Resolve\Handler\WithOutRefererCheckHandler;
+use App\Services\Detector\OsDetector\ChromeOsDetector;
+use App\Services\Detector\OsDetector\IosDetector;
+use App\Services\Detector\OsDetector\OsXDetector;
 
 return [
-    'chainHandlers' => [
-        BotCheckHandler::class,
-        OsCheckHandler::class,
-        IpCheckHandler::class,
-        ProxyCheckHandler::class,
-        WithOutRefererCheckHandler::class,
-        StopWordsRefererCheckHandler::class,
-        IspCheckHandler::class,
-        LanguageCheckHandler::class,
-        CountryCheckHandler::class,
-        UriShouldContainCheckHandler::class,
-        UriStopWordCheckHandler::class,
-        UserAgentCheckHandler::class,
+    'chainDetectors' => [
+        // Chrome OS before OS X
+        ChromeOsDetector::class,
+        // iOS before OS X
+        IosDetector::class,
+        OsXDetector::class,
     ],
 ];

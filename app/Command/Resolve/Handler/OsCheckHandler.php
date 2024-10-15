@@ -19,9 +19,9 @@ class OsCheckHandler extends AbstractCheckHandler
 
     public function handle(Command $command): Response
     {
-        $userOs = $this->osDetector->detectName($command->getUserAgent());
+        $userOs = $this->osDetector->detect($command->getUserAgent());
 
-        if ($this->isForbiddenOs(new Os($userOs))) {
+        if ($this->isForbiddenOs(new Os($userOs->getValue(), $userOs->getVersion()))) {
             return new BadResponse('Forbidden OS');
         }
 

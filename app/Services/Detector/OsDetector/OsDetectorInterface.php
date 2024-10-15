@@ -8,5 +8,5 @@ use App\Common\DTO\UserAgent;
 
 interface OsDetectorInterface
 {
-    public function detectName(UserAgent $userAgent): string;
+    public function detect(UserAgent $userAgent): Os;
 }

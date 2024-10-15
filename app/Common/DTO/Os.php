@@ -2,6 +2,9 @@
 
 namespace App\Common\DTO;
 
+use App\Exceptions\UnknownOSException;
+use http\Exception\InvalidArgumentException;
+
 class Os
 {
     public const OS_X = 'OS X';
@@ -27,6 +30,20 @@ class Os
         private string $value,
         private ?string $version = null
     ) {
+
+    }
+
+    /**
+     * @throws \App\Exceptions\UnknownOSException
+     */
+    public static function createOs(UserAgent $userAgent): Os
+    {
+        return match ($userAgent->getValue()) {
+            self::OS_X => self::createOSX($userAgent),
+            self::IOS => self::createIOS($userAgent),
+            self::CHROME_OS => self::createChrome($userAgent),
+            default => throw new UnknownOSException()
+        };
     }
 
     public function getValue(): string
@@ -34,7 +51,7 @@ class Os
         return $this->value;
     }
 
-    public static function createOSX(UserAgent $userAgent): Os
+    private static function createOSX(UserAgent $userAgent): Os
     {
         if (preg_match('/OS X ([\d\._]*)/i', $userAgent->getValue(), $matches)) {
             if (isset($matches[1])) {
@@ -49,7 +66,7 @@ class Os
         return $this->version;
     }
 
-    public static function createChrome(UserAgent $userAgent): self
+    private static function createChrome(UserAgent $userAgent): self
     {
         if (preg_match('/Chrome\/([\d\.]*)/i', $userAgent->getValue(), $matches)) {
             return new self(self::CHROME_OS, $matches[1]);
@@ -57,7 +74,7 @@ class Os
         throw new \InvalidArgumentException(self::CHROME_OS . ' version is missing');
     }
 
-    public static function createIOS(UserAgent $userAgent): self
+    private static function createIOS(UserAgent $userAgent): self
     {
         if (preg_match('/CPU( iPhone)? OS ([\d_]*)/i', $userAgent->getValue(), $matches)) {
             return new self(self::IOS, str_replace('_', '.', $matches[2]));
