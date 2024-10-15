@@ -72,7 +72,7 @@ class CloakController extends Controller
         //TODO refactor
 
         return new Ip('89.209.161.249');
-//        return new Ip($request->ip());
+//         return new Ip($request->ip());
     }
 
     private function getReferer(Request $request): Referer
