@@ -2,7 +2,6 @@
 
 namespace App\Common\DTO;
 
-
 class Os
 {
     public const OS_X = 'OS X';
