@@ -6,72 +6,48 @@ use App\Common\DTO\Os;
 use App\Common\DTO\UserAgent;
 use App\Exceptions\UnknownOSException;
 use App\Services\Detector\OsDetector\OsDetector;
+use App\Services\Detector\OsDetector\OsDetectorInterface;
 use PHPUnit\Framework\TestCase;
 
 class OsDetectorTest extends TestCase
 {
+    private OsDetectorInterface $detectorMock;
     private OsDetector $osDetector;
 
     protected function setUp(): void
     {
-        $this->osDetector = new OsDetector();
+        $this->detectorMock = $this->createMock(OsDetectorInterface::class);
+        $this->osDetector = new OsDetector($this->detectorMock);
     }
 
-    /**
-     * @throws \App\Exceptions\UnknownOSException
-     */
-    public function testDetectChromeOs(): void
+    public function testDetectReturnsCorrectOs(): void
     {
         $userAgent = new UserAgent(
-            'Mozilla/5.0 (X11; CrOS x86_64 13099.45.0) ' .
+            'Mozilla/5.0 (X11; CrOS x86_64 14410.73.0) ' .
             'AppleWebKit/537.36 (KHTML, like Gecko) ' .
-            'Chrome/91.0.4472.114 Safari/537.36'
+            'Chrome/85.0.4183.121 Safari/537.36'
         );
+        $expectedOs = new Os('Chrome OS', '1.0');
 
-        $detectedOsName = $this->osDetector->detectName($userAgent);
+        $this->detectorMock
+            ->method('detect')
+            ->with($userAgent)
+            ->willReturn($expectedOs);
 
-        $this->assertEquals(Os::CHROME_OS, $detectedOsName);
+        $os = $this->osDetector->detect($userAgent);
+        $this->assertEquals($expectedOs, $os);
     }
 
-    public function testDetectIOS(): void
+    public function testDetectThrowsExceptionForUnknownOs(): void
     {
-        $userAgent = new UserAgent(
-            'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) ' .
-            'AppleWebKit/605.1.15 (KHTML, like Gecko) ' .
-            'CriOS/129.0.6668.69 Mobile/15E148 Safari/604.1'
-        );
+        $userAgent = new UserAgent('Unknown User Agent');
 
-        $detectedOsName = $this->osDetector->detectName($userAgent);
+        $this->detectorMock
+            ->method('detect')
+            ->with($userAgent)
+            ->willThrowException(new UnknownOSException("Unknown operating system."));
 
-        $this->assertEquals(Os::IOS, $detectedOsName);
-    }
-
-    /**
-     * @throws \App\Exceptions\UnknownOSException
-     */
-    public function testDetectOSX(): void
-    {
-        $userAgent = new UserAgent(
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) ' .
-            'AppleWebKit/605.1.15 (KHTML, like Gecko) ' .
-            'Version/14.0.3 Safari/605.1.15'
-        );
-
-        $detectedOsName = $this->osDetector->detectName($userAgent);
-
-        $this->assertEquals(Os::OS_X, $detectedOsName);
-    }
-
-    public function testDetectUnknownOSExceptionThrowsException(): void
-    {
         $this->expectException(UnknownOSException::class);
-
-        $userAgent = new UserAgent(
-            'Mozilla/5.0 (Unknown OS) ' .
-            'AppleWebKit/537.36 (KHTML, like Gecko) ' .
-            'Chrome/91.0.4472.114 Safari/537.36'
-        );
-
-        $this->osDetector->detectName($userAgent);
+        $this->osDetector->detect($userAgent);
     }
 }

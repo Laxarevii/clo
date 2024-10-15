@@ -1,6 +1,7 @@
 <?php
 
 namespace Tests\Unit\Command\Resolve\Handler;
+
 namespace Tests\Unit\Command\Resolve\Handler;
 
 use App\Command\Resolve\Command;
@@ -38,10 +39,8 @@ class OsCheckHandlerTest extends TestCase
 
     public function testHandleReturnsBadResponseForForbiddenOs(): void
     {
-        $this->osDetectorMock
-            ->method('detectName')
-            ->with($this->commandMock->getUserAgent())
-            ->willReturn(Os::OS_X);
+        $this->osMock->method('getValue')->willReturn(Os::OS_X);
+        $this->osDetectorMock->method('detect')->with($this->commandMock->getUserAgent())->willReturn($this->osMock);
 
         $handler = new OsCheckHandler($this->allowedOses, $this->osDetectorMock);
         $response = $handler->handle($this->commandMock);
@@ -52,7 +51,8 @@ class OsCheckHandlerTest extends TestCase
 
     public function testHandleDelegatesToNextHandlerForAllowedOs(): void
     {
-        $this->osDetectorMock->method('detectName')->with($this->commandMock->getUserAgent())->willReturn(Os::WINDOWS);
+        $this->osMock->method('getValue')->willReturn(Os::WINDOWS);
+        $this->osDetectorMock->method('detect')->with($this->commandMock->getUserAgent())->willReturn($this->osMock);
         $this->nextHandlerMock->method('handle')->with($this->commandMock)->willReturn(new SuccessResponse());
 
         $handler = new OsCheckHandler($this->allowedOses, $this->osDetectorMock);
@@ -65,7 +65,8 @@ class OsCheckHandlerTest extends TestCase
 
     public function testHandleReturnsSuccessResponseIfNoNextHandler(): void
     {
-        $this->osDetectorMock->method('detectName')->with($this->commandMock->getUserAgent())->willReturn(Os::LINUX);
+        $this->osMock->method('getValue')->willReturn(Os::LINUX);
+        $this->osDetectorMock->method('detect')->with($this->commandMock->getUserAgent())->willReturn($this->osMock);
 
         $handler = new OsCheckHandler($this->allowedOses, $this->osDetectorMock);
         $response = $handler->handle($this->commandMock);
