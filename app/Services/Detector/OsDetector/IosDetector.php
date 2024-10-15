@@ -18,7 +18,7 @@ class IosDetector extends AbstractOsDetector
             ) &&
             stripos($userAgentValue, 'OS X') !== false
         ) {
-            return new Os('iOS', $this->getVersionFromUserAgent($userAgent));
+            return Os::getIos($this->getVersionFromUserAgent($userAgent));
         }
 
         return null;
@@ -27,7 +27,7 @@ class IosDetector extends AbstractOsDetector
     private function getVersionFromUserAgent(UserAgent $userAgent): string
     {
         if (
-            preg_match('/CPU( iPhone)? OS ([\d_]*)/i', $userAgent->getValue(), $matches)
+            preg_match('/CPU( iPhone)? OS ([\d_]*)/i', $userAgent->getValue(), $matches) === 1
             && !empty($matches[2])
         ) {
             return str_replace('_', '.', $matches[2]);

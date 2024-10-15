@@ -23,7 +23,7 @@ class IosDetectorTest extends TestCase
         $userAgentValue =
             'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/129.0.6668.69 Mobile/15E148 Safari/604.1';
         $userAgent = new UserAgent($userAgentValue);
-        $expectedOs = new Os(Os::IOS, '18.0');
+        $expectedOs = Os::getIos('18.0');
         $os = $this->iosDetector->detect($userAgent);
         $this->assertEquals($expectedOs, $os);
     }

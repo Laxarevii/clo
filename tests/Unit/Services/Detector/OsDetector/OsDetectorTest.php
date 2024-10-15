@@ -27,7 +27,7 @@ class OsDetectorTest extends TestCase
             'AppleWebKit/537.36 (KHTML, like Gecko) ' .
             'Chrome/85.0.4183.121 Safari/537.36'
         );
-        $expectedOs = new Os('Chrome OS', '1.0');
+        $expectedOs = Os::getChromeOs('1.0');
 
         $this->detectorMock
             ->method('detect')

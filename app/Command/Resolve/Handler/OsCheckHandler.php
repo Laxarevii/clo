@@ -21,7 +21,7 @@ class OsCheckHandler extends AbstractCheckHandler
     {
         $userOs = $this->osDetector->detect($command->getUserAgent());
 
-        if ($this->isForbiddenOs(new Os($userOs->getValue(), $userOs->getVersion()))) {
+        if ($this->isForbiddenOs($userOs)) {
             return new BadResponse('Forbidden OS');
         }
 
@@ -30,6 +30,6 @@ class OsCheckHandler extends AbstractCheckHandler
 
     private function isForbiddenOs(Os $userOs): bool
     {
-        return !in_array($userOs->getValue(), $this->allowedOses);
+        return !in_array($userOs->getName(), $this->allowedOses);
     }
 }

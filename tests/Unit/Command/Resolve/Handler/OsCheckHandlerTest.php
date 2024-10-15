@@ -39,7 +39,7 @@ class OsCheckHandlerTest extends TestCase
 
     public function testHandleReturnsBadResponseForForbiddenOs(): void
     {
-        $this->osMock->method('getValue')->willReturn(Os::OS_X);
+        $this->osMock->method('getName')->willReturn(Os::OS_X);
         $this->osDetectorMock->method('detect')->with($this->commandMock->getUserAgent())->willReturn($this->osMock);
 
         $handler = new OsCheckHandler($this->allowedOses, $this->osDetectorMock);
@@ -51,7 +51,7 @@ class OsCheckHandlerTest extends TestCase
 
     public function testHandleDelegatesToNextHandlerForAllowedOs(): void
     {
-        $this->osMock->method('getValue')->willReturn(Os::WINDOWS);
+        $this->osMock->method('getName')->willReturn(Os::WINDOWS);
         $this->osDetectorMock->method('detect')->with($this->commandMock->getUserAgent())->willReturn($this->osMock);
         $this->nextHandlerMock->method('handle')->with($this->commandMock)->willReturn(new SuccessResponse());
 
@@ -65,7 +65,7 @@ class OsCheckHandlerTest extends TestCase
 
     public function testHandleReturnsSuccessResponseIfNoNextHandler(): void
     {
-        $this->osMock->method('getValue')->willReturn(Os::LINUX);
+        $this->osMock->method('getName')->willReturn(Os::LINUX);
         $this->osDetectorMock->method('detect')->with($this->commandMock->getUserAgent())->willReturn($this->osMock);
 
         $handler = new OsCheckHandler($this->allowedOses, $this->osDetectorMock);

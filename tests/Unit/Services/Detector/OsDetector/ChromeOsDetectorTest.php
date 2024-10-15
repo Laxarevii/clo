@@ -4,6 +4,7 @@ namespace Tests\Unit\Services\Detector\OsDetector;
 
 use App\Common\DTO\Os;
 use App\Common\DTO\UserAgent;
+use App\Exceptions\UnknownOSException;
 use App\Exceptions\UnknownOsVersionException;
 use App\Services\Detector\OsDetector\ChromeOsDetector;
 use PHPUnit\Framework\TestCase;
@@ -17,19 +18,45 @@ class ChromeOsDetectorTest extends TestCase
         $this->chromeOsDetector = new ChromeOsDetector();
     }
 
-    public function testDoDetectReturnsChromeOs(): void
+    public function testGetVersionFromUserAgentReturnsVersion(): void
     {
-        $userAgent = new UserAgent('Mozilla/5.0 (X11; CrOS x86_64 14410.73.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36');
-        $expectedOs = new Os(Os::CHROME_OS, '85.0.4183.121');
+        $userAgentValue = 'Mozilla/5.0 (X11; CrOS x86_64 14571.49.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36';
+        $userAgent = new UserAgent($userAgentValue);
+
         $os = $this->chromeOsDetector->detect($userAgent);
-        $this->assertEquals($expectedOs, $os);
+
+        $this->assertInstanceOf(Os::class, $os);
+        $this->assertEquals('Chrome OS', $os->getName());
+        $this->assertEquals('89.0.4389.82', $os->getVersion());
     }
 
-    public function testGetVersionFromUserAgentThrowsExceptionForMissingVersion(): void
+    public function testGetVersionFromUserAgentThrowsUnknownOsVersionException(): void
     {
-        $userAgent = new UserAgent('Mozilla/5.0 (X11; CrOS x86_64 14410.73.0) AppleWebKit/537.36 (KHTML, like Gecko) Safari/537.36');
+        $userAgentValue = 'Mozilla/5.0 (Linux; CrOS x86_64 14571.49.0) AppleWebKit/537.36 (KHTML, like Gecko) Safari/537.36';
+        $userAgent = new UserAgent($userAgentValue);
+
         $this->expectException(UnknownOsVersionException::class);
-        $this->expectExceptionMessage(Os::CHROME_OS . ' version is missing');
+        $this->expectExceptionMessage('Chrome OS version is missing');
+
+        $this->chromeOsDetector->detect($userAgent);
+    }
+
+    public function testDoDetectUnknownOSException(): void
+    {
+        $userAgentValue = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36';
+        $userAgent = new UserAgent($userAgentValue);
+        $this->expectException(UnknownOSException::class);
+        $this->chromeOsDetector->detect($userAgent);
+    }
+
+    public function testDoDetectHandlesInvalidVersionFormat(): void
+    {
+        $userAgentValue = 'Mozilla/5.0 (X11; CrOS x86_64 14571.49.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/invalid.version Safari/537.36';
+        $userAgent = new UserAgent($userAgentValue);
+
+        $this->expectException(UnknownOsVersionException::class);
+        $this->expectExceptionMessage('Chrome OS version is missing');
+
         $this->chromeOsDetector->detect($userAgent);
     }
 }
