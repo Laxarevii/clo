@@ -2,7 +2,6 @@
 
 namespace App\Common\DTO;
 
-use App\Exceptions\UnknownOSException;
 
 class Os
 {
