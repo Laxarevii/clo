@@ -21,6 +21,9 @@ class ChromeOsDetector extends AbstractOsDetector
         return null;
     }
 
+    /**
+     * @throws \App\Exceptions\UnknownOsVersionException
+     */
     private function getVersionFromUserAgent(UserAgent $userAgent): string
     {
         if (preg_match('/Chrome\/([\d\.]*)/i', $userAgent->getValue(), $matches) === 1) {

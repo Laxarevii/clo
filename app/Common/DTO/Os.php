@@ -30,7 +30,7 @@ class Os
         private string $value,
         private ?string $version = null
     ) {
-
+        //TODO check empty value
     }
 
     public function getValue(): string

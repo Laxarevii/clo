@@ -4,6 +4,7 @@ namespace App\Services\Detector\OsDetector;
 
 use App\Common\DTO\Os;
 use App\Common\DTO\UserAgent;
+use App\Exceptions\UnknownOsVersionException;
 
 class OsXDetector extends AbstractOsDetector
 {
@@ -16,6 +17,9 @@ class OsXDetector extends AbstractOsDetector
         return null;
     }
 
+    /**
+     * @throws \App\Exceptions\UnknownOsVersionException
+     */
     private function getVersionFromUserAgent(UserAgent $userAgent): string
     {
         if (preg_match('/OS X ([\d\._]*)/i', $userAgent->getValue(), $matches)) {
@@ -23,7 +27,7 @@ class OsXDetector extends AbstractOsDetector
                 return str_replace('_', '.', $matches[1]);
             }
         }
-        throw new \InvalidArgumentException(Os::OS_X . ' version is missing');
+        throw new UnknownOsVersionException(Os::OS_X . ' version is missing');
     }
 }
 
