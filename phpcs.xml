@@ -9,7 +9,6 @@
     <arg name="cache" value="storage/framework/cache/.phpcs"/>
     <arg value="p"/>
 
-
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
     <rule ref="PSR12"/>
     <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>

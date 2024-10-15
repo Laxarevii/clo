@@ -5,11 +5,11 @@ restart: docker-down docker-up
 test: composer-test
 development-enable: composer-development-enable
 development-disable: composer-development-disable
-lint: api-link
+lint: api-lint
 fix:
 	docker-compose run --rm clo-php composer cs-fix
 
-api-link:
+api-lint:
 	docker-compose run --rm clo-php composer lint
 	docker-compose run --rm clo-php composer cs-check
 
