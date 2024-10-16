@@ -46,4 +46,3 @@ class IosDetectorTest extends TestCase
         $this->iosDetector->detect($userAgent);
     }
 }
-

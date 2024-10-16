@@ -249,6 +249,4 @@ class OsTest extends TestCase
         $this->assertEquals(Os::OS2, $os->getName());
         $this->assertNull($os->getVersion());
     }
-
-
 }
