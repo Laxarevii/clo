@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Services\Action\Block;
+namespace App\Action;
 
-use App\Command\Resolve\DTO\BadResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 
-class RedirectStrategy implements BlockActionStrategyInterface
+class RedirectStrategy implements ActionInterface
 {
     public function __construct(
         private string $url,
@@ -14,7 +13,7 @@ class RedirectStrategy implements BlockActionStrategyInterface
     ) {
     }
 
-    public function execute(BadResponse $response): RedirectResponse
+    public function execute(): RedirectResponse
     {
         return Redirect::to($this->url, $this->status);
     }

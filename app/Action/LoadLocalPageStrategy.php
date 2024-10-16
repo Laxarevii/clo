@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Services\Action\Block;
+namespace App\Action;
 
-use App\Command\Resolve\DTO\BadResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 
-class LoadLocalPageStrategy implements BlockActionStrategyInterface
+class LoadLocalPageStrategy implements ActionInterface
 {
     public function __construct(
         private string $localUrl,
     ) {
     }
 
-    public function execute(BadResponse $response): RedirectResponse
+    public function execute(): RedirectResponse
     {
         return Redirect::to($this->localUrl);
     }

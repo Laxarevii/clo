@@ -1,18 +1,15 @@
 <?php
 
-namespace App\Services\Action\Block;
+namespace App\Action;
 
-use App\Command\Resolve\DTO\BadResponse;
-use Illuminate\Http\Response;
-
-class LoadCurlStrategy implements BlockActionStrategyInterface
+class LoadCurlStrategy implements ActionInterface
 {
     public function __construct(
         private string $localUrl,
     ) {
     }
 
-    public function execute(BadResponse $response)
+    public function execute()
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->localUrl);

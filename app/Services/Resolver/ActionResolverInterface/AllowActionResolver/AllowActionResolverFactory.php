@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Resolver\ActionResolverInterface\BlockActionResolver;
+namespace App\Services\Resolver\ActionResolverInterface\AllowActionResolver;
 
 use App\Action\ActionInterface;
 use App\Action\Error404Strategy;
@@ -9,7 +9,7 @@ use App\Action\LoadLocalPageStrategy;
 use App\Action\RedirectStrategy;
 use Psr\Container\ContainerInterface;
 
-class BlockActionResolverFactory
+class AllowActionResolverFactory
 {
     public function __construct(private ContainerInterface $container)
     {
@@ -18,10 +18,7 @@ class BlockActionResolverFactory
     public function create(string $action): ActionInterface
     {
         return match ($action) {
-            'curl' => $this->container->get(LoadCurlStrategy::class),
-            'localPage' => $this->container->get(LoadLocalPageStrategy::class),
-            'error_404' => $this->container->get(Error404Strategy::class),
-            'redirect' => $this->container->get('BlockRedirectStrategy'),
+            'redirect' => $this->container->get('AllowRedirectStrategy'),
             default => new \InvalidArgumentException()
         };
     }

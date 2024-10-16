@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Services\Resolver\ActionResolverInterface\BlockActionResolver;
+namespace App\Services\Resolver\ActionResolverInterface\AllowActionResolver;
 
 use App\Action\ActionInterface;
-use App\Command\Resolve\DTO\Response;
 use App\Services\Resolver\ActionResolverInterface\ActionResolverInterface;
 
-class BlockActionResolver implements ActionResolverInterface
+class AllowActionResolver implements ActionResolverInterface
 {
     public function __construct(private ActionInterface $strategy)
     {

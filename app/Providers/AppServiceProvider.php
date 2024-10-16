@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Action\LoadCurlStrategy;
+use App\Action\LoadLocalPageStrategy;
+use App\Action\RedirectStrategy;
 use App\Command\Resolve\CommandHandler;
 use App\Command\Resolve\Factory\CheckHandlerFactory;
 use App\Command\Resolve\Handler\CountryCheckHandler;
@@ -14,9 +17,6 @@ use App\Command\Resolve\Handler\UriStopWordCheckHandler;
 use App\Command\Resolve\Handler\WithOutRefererCheckHandler;
 use App\Command\Resolve\Interface\CommandHandlerInterface;
 use App\Config\Config;
-use App\Services\Action\Block\LoadCurlStrategy;
-use App\Services\Action\Block\LoadLocalPageStrategy;
-use App\Services\Action\Block\RedirectStrategy;
 use App\Services\Checker\UserAgentChecker\UserAgentChecker;
 use App\Services\Checker\UserAgentChecker\UserAgentCheckerInterface;
 use App\Services\Detector\BlockedIpDetector\BlockedIpDetectorInterface;
@@ -37,17 +37,19 @@ use App\Services\Detector\ProxyDetector\Client\ProxyClientInterface;
 use App\Services\Detector\ProxyDetector\ProxyDetector;
 use App\Services\Detector\ProxyDetector\ProxyDetectorInterface;
 use App\Services\Resolver\ActionResolverInterface\ActionResolverInterface;
+use App\Services\Resolver\ActionResolverInterface\AllowActionResolver\AllowActionResolver;
+use App\Services\Resolver\ActionResolverInterface\AllowActionResolver\AllowActionResolverFactory;
 use App\Services\Resolver\ActionResolverInterface\BlockActionResolver\BlockActionResolver;
 use App\Services\Resolver\ActionResolverInterface\BlockActionResolver\BlockActionResolverFactory;
 use App\Services\Resolver\CloakResolver\CloakResolver;
 use App\Services\Resolver\CloakResolver\CloakResolverInterface;
 use GeoIp2\Database\Reader;
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Client\ClientInterface;
-use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -96,31 +98,58 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ClientInterface::class, Client::class);
         $this->app->bind(ProxyClientInterface::class, BlackboxIpDetectorClient::class);
         $this->app->bind(CloakResolverInterface::class, CloakResolver::class);
-        $this->app->bind(ActionResolverInterface::class, BlockActionResolver::class);
 
+        $this->app->singleton(CloakResolver::class, function (Application $app) {
+            return new CloakResolver(
+                $app->get(BlockActionResolver::class),
+                $app->get(AllowActionResolver::class),
+            );
+        });
         $this->app->singleton(BlockActionResolverFactory::class, function (Application $app) {
             return new BlockActionResolverFactory(
                 $app->get(ContainerInterface::class)
             );
         });
-        $this->app->singleton(RedirectStrategy::class, function (Application $app) {
+        $this->app->singleton('AllowRedirectStrategy', function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
-            $url = $config->get('white')['redirect']['urls'][0];
+            $urls = $config->get('black')['landing']['redirect']['urls'];
+            $key = array_rand($urls);
+            $status = $config->get('black')['landing']['redirect']['status'];
+            return new RedirectStrategy($urls[$key], $status);
+        });
+        $this->app->singleton('BlockRedirectStrategy', function (Application $app) {
+            /** @var Config $config */
+            $config = $app->get(Config::class);
+            $urls = array_rand($config->get('white')['redirect']['urls']);
             $status = $config->get('white')['redirect']['status'];
-            return new RedirectStrategy($url, $status);
+            $key = array_rand($urls);
+            return new RedirectStrategy($urls[$key], $status);
         });
         $this->app->singleton(LoadCurlStrategy::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
-            $url =  $config->get('white')['curl']['url'];
+            $url = $config->get('white')['curl']['url'];
             return new LoadCurlStrategy($url);
         });
         $this->app->singleton(LoadLocalPageStrategy::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
-            $url =  $config->get('white')['localPage']['url'];
+            $url = $config->get('white')['localPage']['url'];
             return new LoadLocalPageStrategy($url);
+        });
+        $this->app->singleton(AllowActionResolver::class, function (Application $app) {
+            /** @var Config $config */
+            $config = $app->get(Config::class);
+            /** @var AllowActionResolverFactory $factory */
+            $factory = $app->make(AllowActionResolverFactory::class);
+
+            $action =
+                $config->get('black')['landing']['action'] ?? throw new \InvalidArgumentException('Invalid action');
+
+            return new AllowActionResolver(
+                $factory->create($action)
+            );
         });
         $this->app->singleton(BlockActionResolver::class, function (Application $app) {
             /** @var Config $config */

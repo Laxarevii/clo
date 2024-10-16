@@ -50,7 +50,7 @@
             ]
         },
         "landing": {
-            "action": "folder",
+            "action": "redirect",
             "folder": {
                 "names": [
                     "land1/index.php"
@@ -73,9 +73,9 @@
             },
             "redirect": {
                 "urls": [
-                    "https://yandex.ru"
+                    "https://www.blackorange.com.ua"
                 ],
-                "type": "303"
+                "status": "303"
             }
         },
         "jsconnect": "replace"
@@ -124,6 +124,7 @@
                     "BY"
                 ],
                 "os": [
+                    "OS X"
                 ],
                 "wordsInUri": [],
                 "languages": [
