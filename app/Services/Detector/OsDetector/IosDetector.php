@@ -32,7 +32,6 @@ class IosDetector extends AbstractOsDetector
         ) {
             return str_replace('_', '.', $matches[2]);
         }
-        //todo  $os->setIsMobile(true);
         throw new UnknownOsVersionException(Os::IOS . ' version is missing');
     }
 }
