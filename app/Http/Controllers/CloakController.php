@@ -11,17 +11,17 @@ use App\Common\DTO\Referer;
 use App\Common\DTO\UserAgent;
 use App\Exceptions\NoAcceptLanguageException;
 use App\Exceptions\NoUserAgentException;
+use App\Services\Resolver\CloakResolver\CloakResolverInterface;
 use GuzzleHttp\Psr7\Uri;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CloakController extends Controller
 {
-    /**
-     * @param CommandHandler $commandHandler
-     */
-    public function __construct(protected CommandHandlerInterface $commandHandler)
-    {
+    public function __construct(
+        private CommandHandlerInterface $commandHandler,
+        private CloakResolverInterface $resolver,
+    ) {
     }
 
     public function resolve(Request $request): JsonResponse
@@ -35,7 +35,7 @@ class CloakController extends Controller
                 $this->getUri($request),
             )
         );
-
+        $res = $this->resolver->resolve($result);
         /** @var \Illuminate\Routing\ResponseFactory $response */
         $response = response();
 

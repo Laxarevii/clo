@@ -1,6 +1,6 @@
 {
     "white": {
-        "action": "folder",
+        "action": "error_404",
         "folder": {
             "names": [
                 "white"
@@ -128,7 +128,6 @@
                     "BY"
                 ],
                 "os": [
-                    "OS X"
                 ],
                 "wordsInUri": [],
                 "languages": [

@@ -14,6 +14,7 @@ use App\Command\Resolve\Handler\UriStopWordCheckHandler;
 use App\Command\Resolve\Handler\WithOutRefererCheckHandler;
 use App\Command\Resolve\Interface\CommandHandlerInterface;
 use App\Config\Config;
+use App\Services\Action\Block\BlockActionStrategyInterface;
 use App\Services\Checker\UserAgentChecker\UserAgentChecker;
 use App\Services\Checker\UserAgentChecker\UserAgentCheckerInterface;
 use App\Services\Detector\BlockedIpDetector\BlockedIpDetectorInterface;
@@ -33,10 +34,16 @@ use App\Services\Detector\ProxyDetector\Client\BlackboxIpDetectorClient;
 use App\Services\Detector\ProxyDetector\Client\ProxyClientInterface;
 use App\Services\Detector\ProxyDetector\ProxyDetector;
 use App\Services\Detector\ProxyDetector\ProxyDetectorInterface;
+use App\Services\Resolver\ActionResolverInterface\ActionResolverInterface;
+use App\Services\Resolver\ActionResolverInterface\BlockActionResolver\BlockActionResolver;
+use App\Services\Resolver\ActionResolverInterface\BlockActionResolver\BlockActionResolverFactory;
+use App\Services\Resolver\CloakResolver\CloakResolver;
+use App\Services\Resolver\CloakResolver\CloakResolverInterface;
 use GeoIp2\Database\Reader;
 use GuzzleHttp\Client;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Client\ClientInterface;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 
@@ -86,7 +93,26 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserAgentCheckerInterface::class, UserAgentChecker::class);
         $this->app->bind(ClientInterface::class, Client::class);
         $this->app->bind(ProxyClientInterface::class, BlackboxIpDetectorClient::class);
+        $this->app->bind(CloakResolverInterface::class, CloakResolver::class);
+        $this->app->bind(ActionResolverInterface::class, BlockActionResolver::class);
 
+        $this->app->singleton(BlockActionResolverFactory::class, function (Application $app) {
+            return new BlockActionResolverFactory(
+                $app->get(ContainerInterface::class)
+            );
+        });
+        $this->app->singleton(BlockActionResolver::class, function (Application $app) {
+            /** @var Config $config */
+            $config = $app->get(Config::class);
+            /** @var BlockActionResolverFactory $factory */
+            $factory = $app->make(BlockActionResolverFactory::class);
+
+            $action = $config->get('white')['action'] ?? throw new \InvalidArgumentException('Invalid action');
+
+            return new BlockActionResolver(
+                $factory->create($action)
+            );
+        });
         $this->app->singleton(BlackboxIpDetectorClient::class, function (Application $app) {
             /** @var GuzzleClientInterface $client */
             $client = $app->get(ClientInterface::class);
@@ -94,6 +120,7 @@ class AppServiceProvider extends ServiceProvider
                 $client
             );
         });
+
         $this->app->singleton(UriShouldContainCheckHandler::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
