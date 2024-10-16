@@ -9,12 +9,13 @@ use Illuminate\Support\Facades\Redirect;
 class RedirectStrategy implements BlockActionStrategyInterface
 {
     public function __construct(
-        private string $url
+        private string $url,
+        private int $status = 303
     ) {
     }
 
     public function execute(BadResponse $response): RedirectResponse
     {
-        return Redirect::to($this->url);
+        return Redirect::to($this->url, $this->status);
     }
 }

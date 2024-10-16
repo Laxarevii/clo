@@ -24,7 +24,7 @@ class CloakController extends Controller
     ) {
     }
 
-    public function resolve(Request $request): JsonResponse
+    public function resolve(Request $request)
     {
         $result = $this->commandHandler->handle(
             new Command(
@@ -35,9 +35,7 @@ class CloakController extends Controller
                 $this->getUri($request),
             )
         );
-        $res = $this->resolver->resolve($result);
-
-        return $res;
+        return $this->resolver->resolve($result);
     }
 
     private function getAcceptLanguage(Request $request): AcceptLanguage

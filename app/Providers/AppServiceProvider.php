@@ -15,6 +15,7 @@ use App\Command\Resolve\Handler\WithOutRefererCheckHandler;
 use App\Command\Resolve\Interface\CommandHandlerInterface;
 use App\Config\Config;
 use App\Services\Action\Block\BlockActionStrategyInterface;
+use App\Services\Action\Block\RedirectStrategy;
 use App\Services\Checker\UserAgentChecker\UserAgentChecker;
 use App\Services\Checker\UserAgentChecker\UserAgentCheckerInterface;
 use App\Services\Detector\BlockedIpDetector\BlockedIpDetectorInterface;
@@ -100,6 +101,13 @@ class AppServiceProvider extends ServiceProvider
             return new BlockActionResolverFactory(
                 $app->get(ContainerInterface::class)
             );
+        });
+        $this->app->singleton(RedirectStrategy::class, function (Application $app) {
+            /** @var Config $config */
+            $config = $app->get(Config::class);
+            $url = $config->get('white')['redirect']['urls'][0];
+            $status = $config->get('white')['redirect']['status'];
+            return new RedirectStrategy($url, $status);
         });
         $this->app->singleton(BlockActionResolver::class, function (Application $app) {
             /** @var Config $config */

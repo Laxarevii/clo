@@ -1,13 +1,13 @@
 {
     "white": {
-        "action": "error_404",
+        "action": "redirect",
         "folder": {
             "names": [
                 "white"
             ]
         },
         "redirect": {
-            "type": "303",
+            "status": "303",
             "urls": [
                 "https://google.com"
             ]
