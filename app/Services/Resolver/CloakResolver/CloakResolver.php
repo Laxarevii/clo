@@ -17,7 +17,7 @@ class CloakResolver implements CloakResolverInterface
     public function resolve(ResponseInterface $response)
     {
         if ($response instanceof BadResponse) {
-            $this->actionResolver->resolve($response);
+           return $this->actionResolver->resolve($response);
         }
         return $response;
     }
