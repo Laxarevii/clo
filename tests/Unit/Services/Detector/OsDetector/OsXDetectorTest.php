@@ -20,7 +20,10 @@ class OsXDetectorTest extends TestCase
 
     public function testDoDetectReturnsOsX(): void
     {
-        $userAgentValue = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Safari/605.1.15';
+        $userAgentValue =
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) ' .
+            'AppleWebKit/605.1.15 (KHTML, like Gecko) ' .
+            'Version/14.0.1 Safari/605.1.15';
         $userAgent = new UserAgent($userAgentValue);
 
         $os = $this->osXDetector->detect($userAgent);
@@ -32,7 +35,10 @@ class OsXDetectorTest extends TestCase
 
     public function testDoDetectReturnsNullForNonOsX(): void
     {
-        $userAgentValue = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36';
+        $userAgentValue =
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) ' .
+            'AppleWebKit/537.36 (KHTML, like Gecko) ' .
+            'Chrome/85.0.4183.121 Safari/537.36';
         $userAgent = new UserAgent($userAgentValue);
 
         $this->expectException(UnknownOSException::class);
@@ -42,7 +48,10 @@ class OsXDetectorTest extends TestCase
 
     public function testGetVersionFromUserAgentThrowsUnknownOsVersionException(): void
     {
-        $userAgentValue = 'Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Safari/605.1.15';
+        $userAgentValue =
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X) ' .
+            'AppleWebKit/605.1.15 (KHTML, like Gecko) ' .
+            'Version/14.0.1 Safari/605.1.15';
         $userAgent = new UserAgent($userAgentValue);
 
         $this->expectException(UnknownOsVersionException::class);
@@ -53,7 +62,10 @@ class OsXDetectorTest extends TestCase
 
     public function testGetVersionFromUserAgentHandlesUnderscore(): void
     {
-        $userAgentValue = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Safari/605.1.15';
+        $userAgentValue =
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) ' .
+            'AppleWebKit/605.1.15 (KHTML, like Gecko) ' .
+            'Version/14.0.1 Safari/605.1.15';
         $userAgent = new UserAgent($userAgentValue);
 
         $os = $this->osXDetector->detect($userAgent);
