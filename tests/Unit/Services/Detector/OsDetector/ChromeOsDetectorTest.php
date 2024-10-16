@@ -20,7 +20,9 @@ class ChromeOsDetectorTest extends TestCase
 
     public function testGetVersionFromUserAgentReturnsVersion(): void
     {
-        $userAgentValue = 'Mozilla/5.0 (X11; CrOS x86_64 14571.49.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36';
+        $userAgentValue = 'Mozilla/5.0 (X11; CrOS x86_64 14571.49.0) ' .
+            'AppleWebKit/537.36 (KHTML, like Gecko) ' .
+            'Chrome/89.0.4389.82 Safari/537.36';
         $userAgent = new UserAgent($userAgentValue);
 
         $os = $this->chromeOsDetector->detect($userAgent);
@@ -32,7 +34,9 @@ class ChromeOsDetectorTest extends TestCase
 
     public function testGetVersionFromUserAgentThrowsUnknownOsVersionException(): void
     {
-        $userAgentValue = 'Mozilla/5.0 (Linux; CrOS x86_64 14571.49.0) AppleWebKit/537.36 (KHTML, like Gecko) Safari/537.36';
+        $userAgentValue = 'Mozilla/5.0 (Linux; CrOS x86_64 14571.49.0) ' .
+            'AppleWebKit/537.36 (KHTML, like Gecko) ' .
+            'Safari/537.36';
         $userAgent = new UserAgent($userAgentValue);
 
         $this->expectException(UnknownOsVersionException::class);
@@ -43,15 +47,20 @@ class ChromeOsDetectorTest extends TestCase
 
     public function testDoDetectUnknownOSException(): void
     {
-        $userAgentValue = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36';
+        $userAgentValue = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) ' .
+            'AppleWebKit/537.36 (KHTML, like Gecko) ' .
+            'Chrome/89.0.4389.82 Safari/537.36';
         $userAgent = new UserAgent($userAgentValue);
+
         $this->expectException(UnknownOSException::class);
         $this->chromeOsDetector->detect($userAgent);
     }
 
     public function testDoDetectHandlesInvalidVersionFormat(): void
     {
-        $userAgentValue = 'Mozilla/5.0 (X11; CrOS x86_64 14571.49.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/invalid.version Safari/537.36';
+        $userAgentValue = 'Mozilla/5.0 (X11; CrOS x86_64 14571.49.0) ' .
+            'AppleWebKit/537.36 (KHTML, like Gecko) ' .
+            'Chrome/invalid.version Safari/537.36';
         $userAgent = new UserAgent($userAgentValue);
 
         $this->expectException(UnknownOsVersionException::class);

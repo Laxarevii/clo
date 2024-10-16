@@ -21,7 +21,9 @@ class IosDetectorTest extends TestCase
     public function testDoDetectReturnsIos(): void
     {
         $userAgentValue =
-            'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/129.0.6668.69 Mobile/15E148 Safari/604.1';
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) ' .
+            'AppleWebKit/605.1.15 (KHTML, like Gecko) ' .
+            'CriOS/129.0.6668.69 Mobile/15E148 Safari/604.1';
         $userAgent = new UserAgent($userAgentValue);
         $expectedOs = Os::getIos('18.0');
         $os = $this->iosDetector->detect($userAgent);
@@ -38,10 +40,12 @@ class IosDetectorTest extends TestCase
     public function testGetVersionFromUserAgentThrowsUnknownOSVersionException(): void
     {
         $userAgentValue =
-            'Mozilla/5.0 (iPhone; CPU iPhone OS like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1';
+            'Mozilla/5.0 (iPhone; CPU iPhone OS like Mac OS X) ' .
+            'AppleWebKit/605.1.15 (KHTML, like Gecko) ' .
+            'Version/14.0 Mobile/15E148 Safari/604.1';
         $userAgent = new UserAgent($userAgentValue);
 
-        $this->expectException(UnknownOSVersionException::class);
+        $this->expectException(UnknownOsVersionException::class);
 
         $this->iosDetector->detect($userAgent);
     }
