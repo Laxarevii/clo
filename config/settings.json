@@ -1,10 +1,8 @@
 {
     "white": {
-        "action": "redirect",
-        "folder": {
-            "names": [
-                "white"
-            ]
+        "action": "curl",
+        "localPage": {
+            "url": "/"
         },
         "redirect": {
             "status": "303",
@@ -13,9 +11,7 @@
             ]
         },
         "curl": {
-            "urls": [
-                "https://google.com/"
-            ]
+            "url": "https://www.blackorange.com.ua"
         },
         "error": {
             "codes": []
@@ -141,7 +137,6 @@
                     "filePath": "/config/blockedIps.txt"
                 },
                 "uriWords": [
-
                 ],
                 "userAgents": [
                     "facebook",

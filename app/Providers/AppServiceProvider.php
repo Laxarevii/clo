@@ -14,7 +14,8 @@ use App\Command\Resolve\Handler\UriStopWordCheckHandler;
 use App\Command\Resolve\Handler\WithOutRefererCheckHandler;
 use App\Command\Resolve\Interface\CommandHandlerInterface;
 use App\Config\Config;
-use App\Services\Action\Block\BlockActionStrategyInterface;
+use App\Services\Action\Block\LoadCurlStrategy;
+use App\Services\Action\Block\LoadLocalPageStrategy;
 use App\Services\Action\Block\RedirectStrategy;
 use App\Services\Checker\UserAgentChecker\UserAgentChecker;
 use App\Services\Checker\UserAgentChecker\UserAgentCheckerInterface;
@@ -108,6 +109,18 @@ class AppServiceProvider extends ServiceProvider
             $url = $config->get('white')['redirect']['urls'][0];
             $status = $config->get('white')['redirect']['status'];
             return new RedirectStrategy($url, $status);
+        });
+        $this->app->singleton(LoadCurlStrategy::class, function (Application $app) {
+            /** @var Config $config */
+            $config = $app->get(Config::class);
+            $url =  $config->get('white')['curl']['url'];
+            return new LoadCurlStrategy($url);
+        });
+        $this->app->singleton(LoadLocalPageStrategy::class, function (Application $app) {
+            /** @var Config $config */
+            $config = $app->get(Config::class);
+            $url =  $config->get('white')['localPage']['url'];
+            return new LoadLocalPageStrategy($url);
         });
         $this->app->singleton(BlockActionResolver::class, function (Application $app) {
             /** @var Config $config */
