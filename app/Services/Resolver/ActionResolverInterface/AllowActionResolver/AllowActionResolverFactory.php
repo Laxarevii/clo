@@ -19,6 +19,7 @@ class AllowActionResolverFactory
     {
         return match ($action) {
             'redirect' => $this->container->get('AllowRedirectStrategy'),
+            'curl' => $this->container->get('AllowCurlStrategy'),
             default => new \InvalidArgumentException()
         };
     }

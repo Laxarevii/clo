@@ -121,18 +121,19 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton('BlockRedirectStrategy', function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
-            $urls = array_rand($config->get('white')['redirect']['urls']);
+            $urls = $config->get('white')['redirect']['urls'];
             $status = $config->get('white')['redirect']['status'];
             $key = array_rand($urls);
             return new RedirectStrategy($urls[$key], $status);
         });
-        $this->app->singleton(LoadCurlStrategy::class, function (Application $app) {
+        $this->app->singleton('BlockLoadCurlStrategy', function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
-            $url = $config->get('white')['curl']['url'];
-            return new LoadCurlStrategy($url);
+            $urls = $config->get('white')['curl']['urls'];
+            $key = array_rand($urls);
+            return new LoadCurlStrategy($urls[$key]);
         });
-        $this->app->singleton(LoadLocalPageStrategy::class, function (Application $app) {
+        $this->app->singleton('BlockLoadLocalPageStrategy', function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
             $url = $config->get('white')['localPage']['url'];

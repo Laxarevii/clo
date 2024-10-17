@@ -7,11 +7,17 @@
         "redirect": {
             "status": "303",
             "urls": [
-                "https://google.com"
+                "https://f-store.com.ua/ua/p2356853408-shtany-softshell-multikam.html",
+                "https://f-store.com.ua/ua/p1970045995-chehol-dlya-shlema.html",
+                "https://f-store.com.ua/ua/p2222833885-muzhskaya-takticheskaya-panama.html"
             ]
         },
         "curl": {
-            "url": "https://www.blackorange.com.ua"
+            "urls": [
+                "https://f-store.com.ua/ua/p2356853408-shtany-softshell-multikam.html",
+                "https://f-store.com.ua/ua/p1970045995-chehol-dlya-shlema.html",
+                "https://f-store.com.ua/ua/p2222833885-muzhskaya-takticheskaya-panama.html"
+            ]
         },
         "error": {
             "codes": []
@@ -73,7 +79,7 @@
             },
             "redirect": {
                 "urls": [
-                    "https://www.blackorange.com.ua"
+                    "https://f-store.com.ua/ua/p2356853408-shtany-softshell-multikam.html"
                 ],
                 "status": "303"
             }
@@ -124,7 +130,6 @@
                     "BY"
                 ],
                 "os": [
-                    "OS X"
                 ],
                 "wordsInUri": [],
                 "languages": [

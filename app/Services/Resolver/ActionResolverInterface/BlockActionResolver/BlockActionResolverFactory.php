@@ -18,8 +18,8 @@ class BlockActionResolverFactory
     public function create(string $action): ActionInterface
     {
         return match ($action) {
-            'curl' => $this->container->get(LoadCurlStrategy::class),
-            'localPage' => $this->container->get(LoadLocalPageStrategy::class),
+            'curl' => $this->container->get('BlockLoadCurlStrategy'),
+            'localPage' => $this->container->get('BlockLoadLocalPageStrategy'),
             'error_404' => $this->container->get(Error404Strategy::class),
             'redirect' => $this->container->get('BlockRedirectStrategy'),
             default => new \InvalidArgumentException()
