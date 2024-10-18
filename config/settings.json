@@ -56,32 +56,24 @@
             ]
         },
         "landing": {
-            "action": "redirect",
-            "folder": {
-                "names": [
-                    "land1/index.php"
-                ],
-                "conversions": {
-                    "script": "order.php",
-                    "logonbuttonclick": false
-                },
-                "customthankyoupage": {
-                    "use": true,
-                    "language": "RU",
-                    "upsell": {
-                        "use": false,
-                        "imgdir": "img",
-                        "header": "This is a header!",
-                        "text": "This is a text!",
-                        "url": "http://ya.ru"
-                    }
-                }
+            "action": "curl",
+            "localPage": {
+                "url": "/"
             },
             "redirect": {
+                "status": "303",
                 "urls": [
-                    "https://f-store.com.ua/ua/p2356853408-shtany-softshell-multikam.html"
-                ],
-                "status": "303"
+                    "https://f-store.com.ua/ua/p2356853408-shtany-softshell-multikam.html",
+                    "https://f-store.com.ua/ua/p1970045995-chehol-dlya-shlema.html",
+                    "https://f-store.com.ua/ua/p2222833885-muzhskaya-takticheskaya-panama.html"
+                ]
+            },
+            "curl": {
+                "urls": [
+                    "https://f-store.com.ua/ua/p2356853408-shtany-softshell-multikam.html",
+                    "https://f-store.com.ua/ua/p1970045995-chehol-dlya-shlema.html",
+                    "https://f-store.com.ua/ua/p2222833885-muzhskaya-takticheskaya-panama.html"
+                ]
             }
         },
         "jsconnect": "replace"
@@ -130,6 +122,7 @@
                     "BY"
                 ],
                 "os": [
+                    "OS X"
                 ],
                 "wordsInUri": [],
                 "languages": [

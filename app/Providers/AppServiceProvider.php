@@ -47,6 +47,8 @@ use GeoIp2\Database\Reader;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Client\ClientInterface;
@@ -126,6 +128,13 @@ class AppServiceProvider extends ServiceProvider
             $key = array_rand($urls);
             return new RedirectStrategy($urls[$key], $status);
         });
+        $this->app->singleton('AllowCurlStrategy', function (Application $app) {
+            /** @var Config $config */
+            $config = $app->get(Config::class);
+            $urls = $config->get('black')['landing']['curl']['urls'];
+            $key = array_rand($urls);
+            return new LoadCurlStrategy($urls[$key]);
+        });
         $this->app->singleton('BlockLoadCurlStrategy', function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
@@ -137,6 +146,12 @@ class AppServiceProvider extends ServiceProvider
             /** @var Config $config */
             $config = $app->get(Config::class);
             $url = $config->get('white')['localPage']['url'];
+            return new LoadLocalPageStrategy($url);
+        });
+        $this->app->singleton('AllowLoadLocalPageStrategy', function (Application $app) {
+            /** @var Config $config */
+            $config = $app->get(Config::class);
+            $url = $config->get('black')['landing']['localPage']['url'];
             return new LoadLocalPageStrategy($url);
         });
         $this->app->singleton(AllowActionResolver::class, function (Application $app) {
@@ -400,5 +415,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        DB::listen(function ($query) {
+            Log::info(
+                $query->sql,
+                $query->bindings,
+                $query->time
+            );
+        });
     }
 }

@@ -18,7 +18,7 @@ return [
         BotCheckHandler::class,
         OsCheckHandler::class,
         IpCheckHandler::class,
-        ProxyCheckHandler::class,
+//        ProxyCheckHandler::class,
         WithOutRefererCheckHandler::class,
         StopWordsRefererCheckHandler::class,
         IspCheckHandler::class,
