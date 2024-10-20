@@ -3,7 +3,6 @@
 namespace App\Command\Resolve\Factory;
 
 use App\Command\Resolve\Interface\CheckHandlerInterface;
-use App\Config\Config;
 use Exception;
 
 class CheckHandlerFactory

@@ -2,8 +2,8 @@
 
 namespace App\Command\Resolve\Handler;
 
-use App\Command\Resolve\Command;
 use App\Command\Common\DTO\Response;
+use App\Command\Resolve\Command;
 use App\Command\Resolve\DTO\BadResponse;
 use App\Services\Detector\BlockedIpDetector\BlockedIpDetectorInterface;
 

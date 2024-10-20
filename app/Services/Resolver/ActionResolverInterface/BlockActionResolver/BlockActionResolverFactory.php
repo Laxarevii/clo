@@ -4,9 +4,6 @@ namespace App\Services\Resolver\ActionResolverInterface\BlockActionResolver;
 
 use App\Action\ActionInterface;
 use App\Action\Error404Strategy;
-use App\Action\LoadCurlStrategy;
-use App\Action\LoadLocalPageStrategy;
-use App\Action\RedirectStrategy;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 
