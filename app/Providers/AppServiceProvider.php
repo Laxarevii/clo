@@ -161,7 +161,8 @@ class AppServiceProvider extends ServiceProvider
            $config = config('settings.cloak');
             return new ChainBuilder(
                 $config,
-                $app
+                $app,
+                $app->get(CheckHandlerFactory::class)
             );
         });
         $this->app->singleton(AllowActionResolver::class, function (Application $app) {
@@ -387,11 +388,9 @@ class AppServiceProvider extends ServiceProvider
 
             $builder = $app->get(ChainBuilder::class);
 
-            $handlers = [$builder->build()];
-            $checkHandlerFactory = new CheckHandlerFactory();
-            $checkHandler = $checkHandlerFactory->create($handlers);
+            $handler = $builder->build();
 
-            return new CommandHandler($checkHandler);
+            return new CommandHandler($handler);
         });
 
         $this->app->singleton(OsDetector::class, function (Application $app): OsDetector {

@@ -2,6 +2,18 @@
 
 use App\Common\DTO\Os;
 
+use App\Command\Resolve\Handler\CountryCheckHandler;
+use App\Command\Resolve\Handler\IpCheckHandler;
+use App\Command\Resolve\Handler\IspCheckHandler;
+use App\Command\Resolve\Handler\LanguageCheckHandler;
+use App\Command\Resolve\Handler\StopWordsRefererCheckHandler;
+use App\Command\Resolve\Handler\BotCheckHandler;
+use App\Command\Resolve\Handler\OsCheckHandler;
+use App\Command\Resolve\Handler\UriShouldContainCheckHandler;
+use App\Command\Resolve\Handler\UriStopWordCheckHandler;
+use App\Command\Resolve\Handler\UserAgentCheckHandler;
+use App\Command\Resolve\Handler\WithOutRefererCheckHandler;
+
 return [
     'cloak' => [
         'block' => [
@@ -23,6 +35,9 @@ return [
                     'https://f-store.com.ua/ua/p1970045995-chehol-dlya-shlema.html',
                     'https://f-store.com.ua/ua/p2222833885-muzhskaya-takticheskaya-panama.html',
                 ],
+            ],
+            'handlers' => [
+                BotCheckHandler::class,
             ],
         ],
         'allow' => [
@@ -47,6 +62,20 @@ return [
 //                        'from' => '00:00',
 //                        'to' => '12:00',
 //                    ],
+                ],
+                [
+                    'action' => 'curl',
+                    'url' => 'https://f-store.com.ua',
+                    'geo' => [
+                        'country' => [
+                            'UA',
+                            'DE',
+                        ],
+                    ],
+                    'os' => [
+                        Os::IOS,
+                        Os::ANDROID,
+                    ],
                 ],
             ],
         ],

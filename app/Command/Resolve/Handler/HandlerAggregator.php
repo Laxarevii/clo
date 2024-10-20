@@ -8,7 +8,7 @@ use App\Command\Resolve\DTO\Response;
 use App\Command\Resolve\DTO\SuccessResponse;
 use App\Command\Resolve\Interface\CheckHandlerInterface;
 
-class ChainHandler extends AbstractCheckHandler
+class HandlerAggregator extends AbstractCheckHandler
 {
     /** @var array<CheckHandlerInterface> $handlers */
     public function __construct(private array $handlers)
