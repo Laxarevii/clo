@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Command\Resolve\Command;
 use App\Command\Resolve\Interface\CommandHandlerInterface;
-use App\Command\Resolve\CommandHandler;
 use App\Common\DTO\AcceptLanguage;
 use App\Common\DTO\Ip;
 use App\Common\DTO\Referer;
@@ -13,7 +12,6 @@ use App\Exceptions\NoAcceptLanguageException;
 use App\Exceptions\NoUserAgentException;
 use App\Services\Resolver\CloakResolver\CloakResolverInterface;
 use GuzzleHttp\Psr7\Uri;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CloakController extends Controller

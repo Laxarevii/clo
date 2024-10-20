@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Action\LoadCurlStrategy;
 use App\Action\LoadLocalPageStrategy;
 use App\Action\RedirectStrategy;
+use App\Command\Resolve\ChainBuilder\ChainBuilder;
+use App\Command\Resolve\ChainBuilder\ChainBuilderFactory;
 use App\Command\Resolve\CommandHandler;
 use App\Command\Resolve\Factory\CheckHandlerFactory;
 use App\Command\Resolve\Handler\CountryCheckHandler;
@@ -154,6 +156,14 @@ class AppServiceProvider extends ServiceProvider
             $url = $config->get('black')['landing']['localPage']['url'];
             return new LoadLocalPageStrategy($url);
         });
+
+        $this->app->singleton(ChainBuilder::class, function (Application $app) {
+           $config = config('settings.cloak');
+            return new ChainBuilder(
+                $config,
+                $app
+            );
+        });
         $this->app->singleton(AllowActionResolver::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
@@ -167,6 +177,7 @@ class AppServiceProvider extends ServiceProvider
                 $factory->create($action)
             );
         });
+
         $this->app->singleton(BlockActionResolver::class, function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
@@ -177,6 +188,11 @@ class AppServiceProvider extends ServiceProvider
 
             return new BlockActionResolver(
                 $factory->create($action)
+            );
+        });
+        $this->app->singleton(ChainBuilderFactory::class, function (Application $app) {
+            return new ChainBuilderFactory(
+                config('settings.cloak')
             );
         });
         $this->app->singleton(BlackboxIpDetectorClient::class, function (Application $app) {
@@ -368,19 +384,10 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(CommandHandler::class, function (Application $app): CommandHandler {
-            $configData = config('chainHandlersList.chainHandlers');
 
-            if (!is_array($configData)) {
-                throw new \InvalidArgumentException('Expected configuration data to be an array');
-            }
+            $builder = $app->get(ChainBuilder::class);
 
-            $handlers = array_map(function ($class) use ($app): mixed {
-                if (!is_string($class)) {
-                    throw new \InvalidArgumentException('Expected class to be a string');
-                }
-                return $app->make($class);
-            }, $configData);
-
+            $handlers = [$builder->build()];
             $checkHandlerFactory = new CheckHandlerFactory();
             $checkHandler = $checkHandlerFactory->create($handlers);
 
