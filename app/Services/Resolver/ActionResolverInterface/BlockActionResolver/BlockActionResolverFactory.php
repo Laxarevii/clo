@@ -7,6 +7,7 @@ use App\Action\Error404Strategy;
 use App\Action\LoadCurlStrategy;
 use App\Action\LoadLocalPageStrategy;
 use App\Action\RedirectStrategy;
+use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 
 class BlockActionResolverFactory
@@ -22,7 +23,7 @@ class BlockActionResolverFactory
             'localPage' => $this->container->get('BlockLoadLocalPageStrategy'),
             'error_404' => $this->container->get(Error404Strategy::class),
             'redirect' => $this->container->get('BlockRedirectStrategy'),
-            default => new \InvalidArgumentException()
+            default => new InvalidArgumentException()
         };
     }
 }

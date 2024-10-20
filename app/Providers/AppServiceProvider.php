@@ -6,7 +6,7 @@ use App\Action\LoadCurlStrategy;
 use App\Action\LoadLocalPageStrategy;
 use App\Action\RedirectStrategy;
 use App\Command\Resolve\ChainBuilder\ChainBuilder;
-use \App\Command\Resolve\Interface\CommandHandlerInterface;
+use App\Command\Resolve\Interface\CommandHandlerInterface;
 use App\Command\Resolve\CommandHandler;
 use App\Command\Resolve\Factory\CheckHandlerFactory;
 use App\Command\Resolve\Handler\CountryCheckHandler;
@@ -50,8 +50,11 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
+use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Client\ClientInterface;
+use RuntimeException;
+use UnexpectedValueException;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -76,13 +79,13 @@ class AppServiceProvider extends ServiceProvider
             $json = file_get_contents(base_path('config/settings.json'));
 
             if ($json === false) {
-                throw new \RuntimeException('Failed to read the settings file');
+                throw new RuntimeException('Failed to read the settings file');
             }
 
             $settings = json_decode($json, true);
 
             if (!is_array($settings)) {
-                throw new \RuntimeException('Settings file must return a valid JSON array');
+                throw new RuntimeException('Settings file must return a valid JSON array');
             }
 
             return new Config($settings);
@@ -156,7 +159,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(ChainBuilder::class, function (Application $app) {
-           $config = config('settings.cloak');
+            $config = config('settings.cloak');
             return new ChainBuilder(
                 $config,
                 $app,
@@ -170,7 +173,7 @@ class AppServiceProvider extends ServiceProvider
             $factory = $app->make(AllowActionResolverFactory::class);
 
             $action =
-                $config->get('black')['landing']['action'] ?? throw new \InvalidArgumentException('Invalid action');
+                $config->get('black')['landing']['action'] ?? throw new InvalidArgumentException('Invalid action');
 
             return new AllowActionResolver(
                 $factory->create($action)
@@ -183,7 +186,7 @@ class AppServiceProvider extends ServiceProvider
             /** @var BlockActionResolverFactory $factory */
             $factory = $app->make(BlockActionResolverFactory::class);
 
-            $action = $config->get('white')['action'] ?? throw new \InvalidArgumentException('Invalid action');
+            $action = $config->get('white')['action'] ?? throw new InvalidArgumentException('Invalid action');
 
             return new BlockActionResolver(
                 $factory->create($action)
@@ -206,25 +209,25 @@ class AppServiceProvider extends ServiceProvider
 
             // Ensure that 'tds' config is an array
             if (!is_array($tdsConfig)) {
-                throw new \InvalidArgumentException('Expected tds configuration to be an array');
+                throw new InvalidArgumentException('Expected tds configuration to be an array');
             }
 
             // Access the filters and ensure it is an array
             $filters = $tdsConfig['filters'] ?? [];
             if (!is_array($filters)) {
-                throw new \InvalidArgumentException('Expected filters configuration to be an array');
+                throw new InvalidArgumentException('Expected filters configuration to be an array');
             }
 
             // Access the allowed words
             $allowed = $filters['allowed'] ?? [];
             if (!is_array($allowed)) {
-                throw new \InvalidArgumentException('Expected allowed filters configuration to be an array');
+                throw new InvalidArgumentException('Expected allowed filters configuration to be an array');
             }
 
             // Get the wordsInUri and ensure it's an array
             $words = $allowed['wordsInUri'] ?? [];
             if (!is_array($words)) {
-                throw new \InvalidArgumentException('Expected wordsInUri to be an array');
+                throw new InvalidArgumentException('Expected wordsInUri to be an array');
             }
 
             return new UriShouldContainCheckHandler($words);
@@ -278,7 +281,7 @@ class AppServiceProvider extends ServiceProvider
             $isps = $config->get('tds')['filters']['blocked']['isps'] ?? [];
 
             if (!is_array($isps)) {
-                throw new \UnexpectedValueException('Blocked ISPs must be an array.');
+                throw new UnexpectedValueException('Blocked ISPs must be an array.');
             }
 
             /** @var IspDetectorInterface $service */
@@ -317,7 +320,7 @@ class AppServiceProvider extends ServiceProvider
             $countries = $config->get('tds')['filters']['allowed']['countries'] ?? [];
 
             if (!is_array($countries)) {
-                throw new \UnexpectedValueException('Allowed countries must be an array.');
+                throw new UnexpectedValueException('Allowed countries must be an array.');
             }
             /** @var CountryDetectorInterface $countryDetector */
             $countryDetector = $app->get(CountryDetectorInterface::class);
@@ -333,7 +336,7 @@ class AppServiceProvider extends ServiceProvider
             $osFilters = $config->get('tds')['filters']['allowed']['os'] ?? [];
 
             if (!is_array($osFilters)) {
-                throw new \InvalidArgumentException('Expected OS filters to be an array');
+                throw new InvalidArgumentException('Expected OS filters to be an array');
             }
 
             return new OsCheckHandler($osFilters, $osDetector);
@@ -358,7 +361,7 @@ class AppServiceProvider extends ServiceProvider
             $filePath = $config->get('tds')['filters']['blocked']['ips']['filePath'] ?? '';
 
             if (empty($filePath)) {
-                throw new \InvalidArgumentException('Expected filePath to be a non-empty string');
+                throw new InvalidArgumentException('Expected filePath to be a non-empty string');
             }
 
             $path = base_path() . '/' . $filePath;
@@ -371,7 +374,7 @@ class AppServiceProvider extends ServiceProvider
             $filePath = config('services.detectors.fileBotDetector.filePath');
 
             if (!is_string($filePath) || empty($filePath)) {
-                throw new \InvalidArgumentException('Expected filePath to be a non-empty string');
+                throw new InvalidArgumentException('Expected filePath to be a non-empty string');
             }
 
             return new FileBotDetector($filePath);
@@ -390,12 +393,12 @@ class AppServiceProvider extends ServiceProvider
             $configData = config('chainOsDetectorsList.chainDetectors');
 
             if (!is_array($configData)) {
-                throw new \InvalidArgumentException('Expected configuration data to be an array');
+                throw new InvalidArgumentException('Expected configuration data to be an array');
             }
 
             $detectors = array_map(function ($class) use ($app): mixed {
                 if (!is_string($class)) {
-                    throw new \InvalidArgumentException('Expected class to be a string');
+                    throw new InvalidArgumentException('Expected class to be a string');
                 }
                 return $app->make($class);
             }, $configData);

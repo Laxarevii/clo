@@ -22,11 +22,10 @@ class HandlerAggregator extends AbstractCheckHandler
             $res = $object->getHandler()->handle($command);
 
             if (!$res instanceof BadResponse) {
-               return $object->getResolver()->execute();
+                return $object->getResolver()->execute();
             }
         }
 
         return $this->nextHandler ? $this->nextHandler->handle($command) : new SuccessResponse();
     }
-
 }

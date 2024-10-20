@@ -28,7 +28,7 @@ class StopWordsRefererCheckHandler extends AbstractCheckHandler
         foreach ($this->stopWords as $stopWord) {
             if ($stopWord === '') {
                 continue;
-            };
+            }
             if (stripos($userReferer, $stopWord)) {
                 return true;
             }

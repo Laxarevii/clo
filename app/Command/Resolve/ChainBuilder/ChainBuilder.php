@@ -4,7 +4,6 @@ namespace App\Command\Resolve\ChainBuilder;
 
 use App\Action\LoadCurlStrategy;
 use App\Command\Resolve\Factory\CheckHandlerFactory;
-use App\Command\Resolve\Handler\ChainHandler;
 use App\Command\Resolve\Handler\CountryCheckHandler;
 use App\Command\Resolve\Handler\HandlerAggregator;
 use App\Command\Resolve\Handler\HandlerAggregatorObject\HandlerAggregatorObject;
@@ -13,6 +12,7 @@ use App\Command\Resolve\Interface\CheckHandlerInterface;
 use App\Services\Detector\CountryDetector\CountryDetectorInterface;
 use App\Services\Detector\OsDetector\OsDetectorInterface;
 use Illuminate\Foundation\Application;
+use InvalidArgumentException;
 
 class ChainBuilder
 {
@@ -43,7 +43,7 @@ class ChainBuilder
         $app = $this->app;
         $handlers = array_map(function ($class) use ($app): mixed {
             if (!is_string($class)) {
-                throw new \InvalidArgumentException('Expected class to be a string');
+                throw new InvalidArgumentException('Expected class to be a string');
             }
             return $app->make($class);
         }, $configData);
@@ -53,6 +53,14 @@ class ChainBuilder
             $this->makeResolver($filter)
         );
         return new HandlerAggregator($filters);
+    }
+
+    private function makeResolver(array $filter): LoadCurlStrategy
+    {
+        return match ($filter['action']) {
+            'curl' => new LoadCurlStrategy($filter['url']),
+            default => throw new InvalidArgumentException('Invalid action')
+        };
     }
 
     private function getBaseHandlerChain(): HandlerAggregator
@@ -75,13 +83,5 @@ class ChainBuilder
             );
         }
         return new HandlerAggregator($filters);
-    }
-
-    private function makeResolver(array $filter): LoadCurlStrategy
-    {
-        return match ($filter['action']) {
-            'curl' => new LoadCurlStrategy($filter['url']),
-            default => throw new \InvalidArgumentException('Invalid action')
-        };
     }
 }

@@ -11,6 +11,12 @@ class LoadCurlStrategy implements ActionInterface
         $this->domain = $this->extractDomainFromUrl($localUrl);
     }
 
+    private function extractDomainFromUrl(string $url): string
+    {
+        $parsedUrl = parse_url($url);
+        return $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+    }
+
     public function execute()
     {
         $ch = curl_init();
@@ -37,20 +43,14 @@ class LoadCurlStrategy implements ActionInterface
     {
         $patterns = [
             '/(href|src)="\/([^"]+)"/i',
-            '/(href|src)="(?!https?:\/\/)([^"]+)"/i'
+            '/(href|src)="(?!https?:\/\/)([^"]+)"/i',
         ];
 
         $replacements = [
             '$1="' . $this->domain . '/$2"',
-            '$1="' . $this->domain . '/$2"'
+            '$1="' . $this->domain . '/$2"',
         ];
 
         return preg_replace($patterns, $replacements, $html);
-    }
-
-    private function extractDomainFromUrl(string $url): string
-    {
-        $parsedUrl = parse_url($url);
-        return $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
     }
 }

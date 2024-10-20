@@ -3,6 +3,7 @@
 namespace App\Services\Detector\OsDetector\Factory;
 
 use App\Services\Detector\OsDetector\OsDetectorInterface;
+use InvalidArgumentException;
 
 class OsDetectorFactory
 {
@@ -13,7 +14,7 @@ class OsDetectorFactory
     public function create(array $detectors): OsDetectorInterface
     {
         if (empty($detectors)) {
-            throw new \InvalidArgumentException('No handlers configured.');
+            throw new InvalidArgumentException('No handlers configured.');
         }
 
         $firstDetector = array_shift($detectors);

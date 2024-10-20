@@ -7,6 +7,7 @@ use App\Entity\Ip;
 use App\Exceptions\NoIsoCodeCountryException;
 use GeoIp2\Exception\AddressNotFoundException;
 use GeoIp2\ProviderInterface;
+use InvalidArgumentException;
 
 class CountryDetector implements CountryDetectorInterface
 {
@@ -27,7 +28,7 @@ class CountryDetector implements CountryDetectorInterface
             }
             return new Country($isoCode);
         } catch (AddressNotFoundException $exception) {
-            throw new \InvalidArgumentException("Country for ip '{$ip->getValue()}' does not exist.");
+            throw new InvalidArgumentException("Country for ip '{$ip->getValue()}' does not exist.");
         }
     }
 }

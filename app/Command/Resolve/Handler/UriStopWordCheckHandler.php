@@ -28,7 +28,7 @@ class UriStopWordCheckHandler extends AbstractCheckHandler
         foreach ($this->stopWords as $stopWord) {
             if ($stopWord === '') {
                 continue;
-            };
+            }
             if (stripos($uri, $stopWord)) {
                 return true;
             }

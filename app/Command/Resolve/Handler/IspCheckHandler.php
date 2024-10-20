@@ -6,6 +6,7 @@ use App\Command\Common\DTO\BadResponse;
 use App\Command\Common\DTO\Response;
 use App\Command\Common\DTO\SuccessResponse;
 use App\Command\Resolve\Command;
+use App\Entity\Isp;
 use App\Services\Detector\IspDetector\IspDetectorInterface;
 
 class IspCheckHandler extends AbstractCheckHandler
@@ -25,7 +26,7 @@ class IspCheckHandler extends AbstractCheckHandler
         return $this->nextHandler ? $this->nextHandler->handle($command) : new SuccessResponse();
     }
 
-    private function isBlockedIsp(\App\Entity\Isp $userIsp): bool
+    private function isBlockedIsp(Isp $userIsp): bool
     {
         return in_array($userIsp->getValue(), $this->blockedIsps, true);
     }

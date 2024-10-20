@@ -6,6 +6,7 @@ use App\Command\Common\DTO\BadResponse;
 use App\Command\Common\DTO\SuccessResponse;
 use App\Command\Resolve\Interface\ResponseInterface;
 use App\Services\Resolver\ActionResolverInterface\ActionResolverInterface;
+use InvalidArgumentException;
 
 class CloakResolver implements CloakResolverInterface
 {
@@ -23,6 +24,6 @@ class CloakResolver implements CloakResolverInterface
         if ($response instanceof SuccessResponse) {
             return $this->allowActionResolver->resolve();
         }
-        throw new \InvalidArgumentException($response::class . ' invalid response type');
+        throw new InvalidArgumentException($response::class . ' invalid response type');
     }
 }

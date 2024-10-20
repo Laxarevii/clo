@@ -5,7 +5,9 @@ namespace App\Services\Detector\IspDetector;
 use App\Entity\Ip;
 use App\Entity\Isp;
 use App\Exceptions\UnknownIspException;
+use Exception;
 use GeoIp2\Database\Reader;
+use InvalidArgumentException;
 
 class IspDetector implements IspDetectorInterface
 {
@@ -22,8 +24,8 @@ class IspDetector implements IspDetectorInterface
                 throw new UnknownIspException();
             }
             return new Isp($reader->autonomousSystemOrganization);
-        } catch (\Exception $exception) {
-            throw new \InvalidArgumentException("Isp for ip '{$ip->getValue()}' does not exist.");
+        } catch (Exception $exception) {
+            throw new InvalidArgumentException("Isp for ip '{$ip->getValue()}' does not exist.");
         }
     }
 }
