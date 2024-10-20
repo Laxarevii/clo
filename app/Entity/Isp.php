@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Common\DTO;
+namespace App\Entity;
 
 class Isp extends AbstractSimpleDTO
 {

@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Services\Detector\ProxyDetector\Client;
 
-use App\Common\DTO\Ip;
+use App\Entity\Ip;
 use App\Services\Detector\ProxyDetector\Client\BlackboxIpDetectorClient;
 use GuzzleHttp\ClientInterface;
 use PHPUnit\Framework\TestCase;

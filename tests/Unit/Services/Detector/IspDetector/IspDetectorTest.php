@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Services\Detector\IspDetector;
 
-use App\Common\DTO\Ip;
-use App\Common\DTO\Isp;
+use App\Entity\Ip;
+use App\Entity\Isp;
 use App\Services\Detector\IspDetector\IspDetector;
 use GeoIp2\Database\Reader;
 use GeoIp2\Exception\AddressNotFoundException;

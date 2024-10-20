@@ -2,26 +2,31 @@
 
 namespace App\Command\Resolve\Handler;
 
+use App\Command\Common\DTO\BadResponse;
+use App\Command\Common\DTO\Response;
+use App\Command\Common\DTO\SuccessResponse;
 use App\Command\Resolve\Command;
-use App\Command\Resolve\DTO\BadResponse;
-use App\Command\Resolve\DTO\Response;
-use App\Command\Resolve\DTO\SuccessResponse;
+use App\Command\Resolve\Handler\HandlerAggregatorObject\HandlerAggregatorObject;
 use App\Command\Resolve\Interface\CheckHandlerInterface;
 
 class HandlerAggregator extends AbstractCheckHandler
 {
-    /** @var array<CheckHandlerInterface> $handlers */
-    public function __construct(private array $handlers)
+    /** @var array<HandlerAggregatorObject> $handlers */
+    public function __construct(private array $objects)
     {
     }
 
-    public function handle(Command $command): Response
+    public function handle(Command $command)
     {
-        foreach ($this->handlers as $handler) {
-            if (($res = $handler->handle($command)) instanceof BadResponse) {
-                return $res;
+        foreach ($this->objects as $object) {
+            $res = $object->getHandler()->handle($command);
+
+            if (!$res instanceof BadResponse) {
+               return $object->getResolver()->execute();
             }
         }
+
         return $this->nextHandler ? $this->nextHandler->handle($command) : new SuccessResponse();
     }
+
 }

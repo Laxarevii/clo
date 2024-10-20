@@ -2,7 +2,7 @@
 
 namespace App\Services\Detector\BotDetector;
 
-use App\Common\DTO\Ip;
+use App\Entity\Ip;
 
 class FileBotDetector implements BotDetectorInterface
 {

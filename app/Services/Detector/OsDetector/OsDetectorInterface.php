@@ -2,9 +2,8 @@
 
 namespace App\Services\Detector\OsDetector;
 
-use App\Common\DTO\Language;
-use App\Common\DTO\Os;
-use App\Common\DTO\UserAgent;
+use App\Entity\Os;
+use App\Entity\UserAgent;
 
 interface OsDetectorInterface
 {

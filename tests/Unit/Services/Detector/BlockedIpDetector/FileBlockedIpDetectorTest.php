@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Services\Detector\BlockedIpDetector;
 
+use App\Entity\Ip;
 use App\Services\Detector\BlockedIpDetector\FileBlockedIpDetector;
 use PHPUnit\Framework\TestCase;
-use App\Common\DTO\Ip;
 
 class FileBlockedIpDetectorTest extends TestCase
 {

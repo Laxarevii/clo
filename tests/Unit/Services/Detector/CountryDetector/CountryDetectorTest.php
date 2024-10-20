@@ -2,13 +2,13 @@
 
 namespace Tests\Unit\Services\Detector\CountryDetector;
 
-use App\Common\DTO\Country;
-use App\Common\DTO\Ip;
+use App\Entity\Country;
+use App\Entity\Ip;
 use App\Services\Detector\CountryDetector\CountryDetector;
 use GeoIp2\Exception\AddressNotFoundException;
 use GeoIp2\Model\Country as CountryModel;
-use GeoIp2\Record\Country as CountryRecord;
 use GeoIp2\ProviderInterface;
+use GeoIp2\Record\Country as CountryRecord;
 use PHPUnit\Framework\TestCase;
 
 class CountryDetectorTest extends TestCase

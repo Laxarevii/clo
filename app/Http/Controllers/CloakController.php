@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Command\Resolve\Command;
 use App\Command\Resolve\Interface\CommandHandlerInterface;
-use App\Common\DTO\AcceptLanguage;
-use App\Common\DTO\Ip;
-use App\Common\DTO\Referer;
-use App\Common\DTO\UserAgent;
+use App\Entity\AcceptLanguage;
+use App\Entity\Ip;
+use App\Entity\Referer;
+use App\Entity\UserAgent;
 use App\Exceptions\NoAcceptLanguageException;
 use App\Exceptions\NoUserAgentException;
 use App\Services\Resolver\CloakResolver\CloakResolverInterface;
@@ -24,7 +24,7 @@ class CloakController extends Controller
 
     public function resolve(Request $request)
     {
-        $result = $this->commandHandler->handle(
+        return  $this->commandHandler->handle(
             new Command(
                 $this->getAcceptLanguage($request),
                 $this->getUserAgent($request),

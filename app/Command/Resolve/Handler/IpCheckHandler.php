@@ -3,9 +3,8 @@
 namespace App\Command\Resolve\Handler;
 
 use App\Command\Resolve\Command;
+use App\Command\Common\DTO\Response;
 use App\Command\Resolve\DTO\BadResponse;
-use App\Command\Resolve\DTO\Response;
-use App\Command\Resolve\DTO\SuccessResponse;
 use App\Services\Detector\BlockedIpDetector\BlockedIpDetectorInterface;
 
 class IpCheckHandler extends AbstractCheckHandler

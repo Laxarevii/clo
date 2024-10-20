@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\CloakController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\CloakController2;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('resolve', [CloakController::class, 'resolve']);
+Route::get('resolve2', [CloakController2::class, 'resolve']);

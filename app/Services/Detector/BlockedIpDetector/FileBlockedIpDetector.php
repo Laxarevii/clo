@@ -2,7 +2,7 @@
 
 namespace App\Services\Detector\BlockedIpDetector;
 
-use App\Common\DTO\Ip;
+use App\Entity\Ip;
 
 class FileBlockedIpDetector implements BlockedIpDetectorInterface
 {

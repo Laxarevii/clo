@@ -2,8 +2,8 @@
 
 namespace App\Services\Resolver\CloakResolver;
 
-use App\Command\Resolve\DTO\BadResponse;
-use App\Command\Resolve\DTO\SuccessResponse;
+use App\Command\Common\DTO\BadResponse;
+use App\Command\Common\DTO\SuccessResponse;
 use App\Command\Resolve\Interface\ResponseInterface;
 use App\Services\Resolver\ActionResolverInterface\ActionResolverInterface;
 

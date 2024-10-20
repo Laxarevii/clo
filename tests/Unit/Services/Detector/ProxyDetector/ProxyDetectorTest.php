@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Services\Detector\ProxyDetector;
 
-use App\Common\DTO\Ip;
+use App\Entity\Ip;
 use App\Services\Detector\ProxyDetector\Client\ProxyClientInterface;
 use App\Services\Detector\ProxyDetector\ProxyDetector;
 use PHPUnit\Framework\TestCase;

@@ -2,8 +2,8 @@
 
 namespace App\Services\Detector\IspDetector;
 
-use App\Common\DTO\Ip;
-use App\Common\DTO\Isp;
+use App\Entity\Ip;
+use App\Entity\Isp;
 
 interface IspDetectorInterface
 {

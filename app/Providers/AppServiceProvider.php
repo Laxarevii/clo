@@ -6,7 +6,7 @@ use App\Action\LoadCurlStrategy;
 use App\Action\LoadLocalPageStrategy;
 use App\Action\RedirectStrategy;
 use App\Command\Resolve\ChainBuilder\ChainBuilder;
-use App\Command\Resolve\ChainBuilder\ChainBuilderFactory;
+use \App\Command\Resolve\Interface\CommandHandlerInterface;
 use App\Command\Resolve\CommandHandler;
 use App\Command\Resolve\Factory\CheckHandlerFactory;
 use App\Command\Resolve\Handler\CountryCheckHandler;
@@ -17,7 +17,6 @@ use App\Command\Resolve\Handler\StopWordsRefererCheckHandler;
 use App\Command\Resolve\Handler\UriShouldContainCheckHandler;
 use App\Command\Resolve\Handler\UriStopWordCheckHandler;
 use App\Command\Resolve\Handler\WithOutRefererCheckHandler;
-use App\Command\Resolve\Interface\CommandHandlerInterface;
 use App\Config\Config;
 use App\Services\Checker\UserAgentChecker\UserAgentChecker;
 use App\Services\Checker\UserAgentChecker\UserAgentCheckerInterface;
@@ -38,7 +37,6 @@ use App\Services\Detector\ProxyDetector\Client\BlackboxIpDetectorClient;
 use App\Services\Detector\ProxyDetector\Client\ProxyClientInterface;
 use App\Services\Detector\ProxyDetector\ProxyDetector;
 use App\Services\Detector\ProxyDetector\ProxyDetectorInterface;
-use App\Services\Resolver\ActionResolverInterface\ActionResolverInterface;
 use App\Services\Resolver\ActionResolverInterface\AllowActionResolver\AllowActionResolver;
 use App\Services\Resolver\ActionResolverInterface\AllowActionResolver\AllowActionResolverFactory;
 use App\Services\Resolver\ActionResolverInterface\BlockActionResolver\BlockActionResolver;
@@ -189,11 +187,6 @@ class AppServiceProvider extends ServiceProvider
 
             return new BlockActionResolver(
                 $factory->create($action)
-            );
-        });
-        $this->app->singleton(ChainBuilderFactory::class, function (Application $app) {
-            return new ChainBuilderFactory(
-                config('settings.cloak')
             );
         });
         $this->app->singleton(BlackboxIpDetectorClient::class, function (Application $app) {

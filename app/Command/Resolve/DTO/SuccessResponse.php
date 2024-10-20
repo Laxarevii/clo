@@ -2,7 +2,6 @@
 
 namespace App\Command\Resolve\DTO;
 
-use App\Command\Resolve\Interface\ResponseInterface;
 
 class SuccessResponse extends Response
 {

@@ -3,10 +3,10 @@
 namespace Tests\Unit\Command\Resolve;
 
 use App\Command\Resolve\Command;
-use App\Common\DTO\AcceptLanguage;
-use App\Common\DTO\Ip;
-use App\Common\DTO\Referer;
-use App\Common\DTO\UserAgent;
+use App\Entity\AcceptLanguage;
+use App\Entity\Ip;
+use App\Entity\Referer;
+use App\Entity\UserAgent;
 use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\TestCase;
 

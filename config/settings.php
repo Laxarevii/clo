@@ -1,18 +1,7 @@
 <?php
 
-use App\Common\DTO\Os;
-
-use App\Command\Resolve\Handler\CountryCheckHandler;
-use App\Command\Resolve\Handler\IpCheckHandler;
-use App\Command\Resolve\Handler\IspCheckHandler;
-use App\Command\Resolve\Handler\LanguageCheckHandler;
-use App\Command\Resolve\Handler\StopWordsRefererCheckHandler;
 use App\Command\Resolve\Handler\BotCheckHandler;
-use App\Command\Resolve\Handler\OsCheckHandler;
-use App\Command\Resolve\Handler\UriShouldContainCheckHandler;
-use App\Command\Resolve\Handler\UriStopWordCheckHandler;
-use App\Command\Resolve\Handler\UserAgentCheckHandler;
-use App\Command\Resolve\Handler\WithOutRefererCheckHandler;
+use App\Entity\Os;
 
 return [
     'cloak' => [
@@ -25,15 +14,11 @@ return [
                 'status' => '303',
                 'urls' => [
                     'https://f-store.com.ua/ua/p2356853408-shtany-softshell-multikam.html',
-                    'https://f-store.com.ua/ua/p1970045995-chehol-dlya-shlema.html',
-                    'https://f-store.com.ua/ua/p2222833885-muzhskaya-takticheskaya-panama.html',
                 ],
             ],
             'curl' => [
                 'urls' => [
                     'https://f-store.com.ua/ua/p2356853408-shtany-softshell-multikam.html',
-                    'https://f-store.com.ua/ua/p1970045995-chehol-dlya-shlema.html',
-                    'https://f-store.com.ua/ua/p2222833885-muzhskaya-takticheskaya-panama.html',
                 ],
             ],
             'handlers' => [
@@ -55,13 +40,6 @@ return [
                         Os::IOS,
                         Os::ANDROID,
                     ],
-//                    'browser' => [
-//                        'chrome',
-//                    ],
-//                    'time' => [
-//                        'from' => '00:00',
-//                        'to' => '12:00',
-//                    ],
                 ],
                 [
                     'action' => 'curl',
@@ -75,6 +53,7 @@ return [
                     'os' => [
                         Os::IOS,
                         Os::ANDROID,
+                        Os::OS_X,
                     ],
                 ],
             ],

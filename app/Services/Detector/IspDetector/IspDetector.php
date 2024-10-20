@@ -2,11 +2,10 @@
 
 namespace App\Services\Detector\IspDetector;
 
-use App\Common\DTO\Ip;
-use App\Common\DTO\Isp;
+use App\Entity\Ip;
+use App\Entity\Isp;
 use App\Exceptions\UnknownIspException;
 use GeoIp2\Database\Reader;
-use GeoIp2\ProviderInterface;
 
 class IspDetector implements IspDetectorInterface
 {

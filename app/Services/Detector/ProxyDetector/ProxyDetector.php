@@ -2,7 +2,7 @@
 
 namespace App\Services\Detector\ProxyDetector;
 
-use App\Common\DTO\Ip;
+use App\Entity\Ip;
 use App\Services\Detector\ProxyDetector\Client\ProxyClientInterface;
 
 class ProxyDetector implements ProxyDetectorInterface

@@ -2,9 +2,8 @@
 
 namespace App\Services\Detector\LanguageDetector;
 
-use App\Common\DTO\AcceptLanguage;
-use App\Common\DTO\Language;
-use App\Common\DTO\UserAgent;
+use App\Entity\AcceptLanguage;
+use App\Entity\Language;
 
 class LanguageDetector implements LanguageDetectorInterface
 {

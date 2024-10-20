@@ -13,7 +13,7 @@ class CommandHandler implements CommandHandlerInterface
     ) {
     }
 
-    public function handle(Command $command): ResponseInterface
+    public function handle(Command $command)
     {
         return $this->handlerChain->handle($command);
     }

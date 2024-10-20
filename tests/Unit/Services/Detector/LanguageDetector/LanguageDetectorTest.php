@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\Services\Detector\LanguageDetector;
 
+use App\Entity\AcceptLanguage;
+use App\Entity\Language;
 use App\Services\Detector\LanguageDetector\LanguageDetector;
 use App\Services\Detector\LanguageDetector\LanguageDetectorInterface;
 use PHPUnit\Framework\TestCase;
-use App\Common\DTO\AcceptLanguage;
-use App\Common\DTO\Language;
 
 class LanguageDetectorTest extends TestCase
 {

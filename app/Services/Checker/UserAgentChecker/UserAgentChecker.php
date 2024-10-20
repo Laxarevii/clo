@@ -2,7 +2,7 @@
 
 namespace App\Services\Checker\UserAgentChecker;
 
-use App\Common\DTO\UserAgent;
+use App\Entity\UserAgent;
 
 class UserAgentChecker implements UserAgentCheckerInterface
 {

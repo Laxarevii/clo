@@ -3,7 +3,7 @@
 namespace Tests\Unit\Command\Resolve\ChainBuilder;
 
 use App\Command\Resolve\ChainBuilder\ChainBuilder;
-use App\Common\DTO\Os;
+use App\Entity\Os;
 use PHPUnit\Framework\TestCase;
 
 class ChainBuilderTest extends TestCase

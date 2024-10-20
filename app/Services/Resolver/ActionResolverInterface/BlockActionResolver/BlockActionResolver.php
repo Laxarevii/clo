@@ -3,7 +3,6 @@
 namespace App\Services\Resolver\ActionResolverInterface\BlockActionResolver;
 
 use App\Action\ActionInterface;
-use App\Command\Resolve\DTO\Response;
 use App\Services\Resolver\ActionResolverInterface\ActionResolverInterface;
 
 class BlockActionResolver implements ActionResolverInterface

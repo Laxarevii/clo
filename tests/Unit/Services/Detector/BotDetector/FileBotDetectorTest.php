@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Services\Detector\BotDetector;
 
+use App\Entity\Ip;
 use App\Services\Detector\BotDetector\FileBotDetector;
 use PHPUnit\Framework\TestCase;
-use App\Common\DTO\Ip;
 
 class FileBotDetectorTest extends TestCase
 {

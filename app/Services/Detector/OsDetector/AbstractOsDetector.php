@@ -2,8 +2,8 @@
 
 namespace App\Services\Detector\OsDetector;
 
-use App\Common\DTO\UserAgent;
-use App\Common\DTO\Os;
+use App\Entity\Os;
+use App\Entity\UserAgent;
 use App\Exceptions\UnknownOSException;
 
 abstract class AbstractOsDetector implements OsDetectorInterface

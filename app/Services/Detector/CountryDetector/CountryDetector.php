@@ -2,8 +2,8 @@
 
 namespace App\Services\Detector\CountryDetector;
 
-use App\Common\DTO\Country;
-use App\Common\DTO\Ip;
+use App\Entity\Country;
+use App\Entity\Ip;
 use App\Exceptions\NoIsoCodeCountryException;
 use GeoIp2\Exception\AddressNotFoundException;
 use GeoIp2\ProviderInterface;

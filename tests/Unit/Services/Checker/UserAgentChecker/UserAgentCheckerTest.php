@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Services\Checker\UserAgentChecker;
 
+use App\Entity\UserAgent;
 use App\Services\Checker\UserAgentChecker\UserAgentChecker;
 use PHPUnit\Framework\TestCase;
-use App\Common\DTO\UserAgent;
 
 class UserAgentCheckerTest extends TestCase
 {

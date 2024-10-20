@@ -2,14 +2,14 @@
 
 namespace Tests\Unit\Command\Resolve\Handler;
 
+use App\Command\CheckBlock\Interface\CheckHandlerInterface;
+use App\Command\Common\DTO\BadResponse;
+use App\Command\Common\DTO\SuccessResponse;
 use App\Command\Resolve\Command;
-use App\Command\Resolve\DTO\BadResponse;
-use App\Command\Resolve\DTO\SuccessResponse;
 use App\Command\Resolve\Handler\LanguageCheckHandler;
-use App\Command\Resolve\Interface\CheckHandlerInterface;
+use App\Entity\AcceptLanguage;
+use App\Entity\Language;
 use App\Services\Detector\LanguageDetector\LanguageDetectorInterface;
-use App\Common\DTO\Language;
-use App\Common\DTO\AcceptLanguage;
 use PHPUnit\Framework\TestCase;
 
 class LanguageCheckHandlerTest extends TestCase

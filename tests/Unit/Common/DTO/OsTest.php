@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Common\DTO;
 
-use App\Common\DTO\Os;
+use App\Entity\Os;
 use PHPUnit\Framework\TestCase;
 
 class OsTest extends TestCase

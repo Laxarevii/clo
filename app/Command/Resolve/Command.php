@@ -2,10 +2,10 @@
 
 namespace App\Command\Resolve;
 
-use App\Common\DTO\AcceptLanguage;
-use App\Common\DTO\Ip;
-use App\Common\DTO\Referer;
-use App\Common\DTO\UserAgent;
+use App\Entity\AcceptLanguage;
+use App\Entity\Ip;
+use App\Entity\Referer;
+use App\Entity\UserAgent;
 use GuzzleHttp\Psr7\Uri;
 
 class Command
@@ -20,7 +20,7 @@ class Command
     }
 
     /**
-     * @return \App\Common\DTO\AcceptLanguage
+     * @return \App\Entity\AcceptLanguage
      */
     public function getAcceptLanguage(): AcceptLanguage
     {
@@ -28,7 +28,7 @@ class Command
     }
 
     /**
-     * @return \App\Common\DTO\UserAgent
+     * @return \App\Entity\UserAgent
      */
     public function getUserAgent(): UserAgent
     {
@@ -36,7 +36,7 @@ class Command
     }
 
     /**
-     * @return \App\Common\DTO\Ip
+     * @return \App\Entity\Ip
      */
     public function getIp(): Ip
     {
@@ -44,7 +44,7 @@ class Command
     }
 
     /**
-     * @return \App\Common\DTO\Referer
+     * @return \App\Entity\Referer
      */
     public function getReferer(): Referer
     {

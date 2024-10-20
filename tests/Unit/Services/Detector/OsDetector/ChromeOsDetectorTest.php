@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Services\Detector\OsDetector;
 
-use App\Common\DTO\Os;
-use App\Common\DTO\UserAgent;
+use App\Entity\Os;
+use App\Entity\UserAgent;
 use App\Exceptions\UnknownOSException;
 use App\Exceptions\UnknownOsVersionException;
 use App\Services\Detector\OsDetector\ChromeOsDetector;

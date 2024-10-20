@@ -2,10 +2,12 @@
 
 namespace App\Command\Resolve\ChainBuilder;
 
+use App\Action\LoadCurlStrategy;
 use App\Command\Resolve\Factory\CheckHandlerFactory;
 use App\Command\Resolve\Handler\ChainHandler;
 use App\Command\Resolve\Handler\CountryCheckHandler;
 use App\Command\Resolve\Handler\HandlerAggregator;
+use App\Command\Resolve\Handler\HandlerAggregatorObject\HandlerAggregatorObject;
 use App\Command\Resolve\Handler\OsCheckHandler;
 use App\Command\Resolve\Interface\CheckHandlerInterface;
 use App\Services\Detector\CountryDetector\CountryDetectorInterface;
@@ -25,7 +27,7 @@ class ChainBuilder
     {
         return $this->linkChains([
             $this->prepareDefaultHandlerChain(),
-            $this->getBaseHandlerChain()
+            $this->getBaseHandlerChain(),
         ]);
     }
 
@@ -48,7 +50,7 @@ class ChainBuilder
         return $this->linkChains($handlers);
     }
 
-    private function getBaseHandlerChain()
+    private function getBaseHandlerChain(): HandlerAggregator
     {
         $filters = [];
         foreach ($this->config['allow']['filters'] as $filter) {
@@ -62,8 +64,19 @@ class ChainBuilder
                     new OsCheckHandler($filter['os'], $this->app->get(OsDetectorInterface::class));
             }
             $innerFilters = $this->linkChains($innerFilters);
-            $filters[] = $innerFilters;
+            $filters[] = new HandlerAggregatorObject(
+                $innerFilters,
+                $this->makeResolver($filter)
+            );
         }
         return new HandlerAggregator($filters);
+    }
+
+    private function makeResolver(array $filter): LoadCurlStrategy
+    {
+        return match ($filter['action']) {
+            'curl' => new LoadCurlStrategy($filter['url']),
+            default => throw new \InvalidArgumentException('Invalid action')
+        };
     }
 }

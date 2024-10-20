@@ -2,14 +2,10 @@
 
 namespace App\Command\Resolve\Handler;
 
+use App\Command\Common\DTO\BadResponse;
+use App\Command\Common\DTO\Response;
+use App\Command\Common\DTO\SuccessResponse;
 use App\Command\Resolve\Command;
-use App\Command\Resolve\DTO\BadResponse;
-use App\Command\Resolve\DTO\Response;
-use App\Command\Resolve\DTO\SuccessResponse;
-use App\Command\Resolve\Interface\CheckHandlerInterface;
-use App\Common\DTO\Ip;
-use App\Services\Detector\CountryDetector\CountryDetectorInterface;
-use App\Services\Detector\OsDetector\OsDetectorInterface;
 
 class UriShouldContainCheckHandler extends AbstractCheckHandler
 {

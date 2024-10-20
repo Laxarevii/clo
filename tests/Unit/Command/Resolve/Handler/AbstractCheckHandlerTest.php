@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Command\Resolve\Handler;
 
-use App\Command\Resolve\Handler\AbstractCheckHandler;
-use App\Command\Resolve\Interface\CheckHandlerInterface;
+use App\Command\CheckBlock\Interface\CheckHandlerInterface;
+use App\Command\Resolve\Block\Handler\AbstractCheckHandler;
 use PHPUnit\Framework\TestCase;
 
 class AbstractCheckHandlerTest extends TestCase
