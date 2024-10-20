@@ -4,7 +4,6 @@ namespace App\Command\Resolve;
 
 use App\Command\Resolve\Interface\CheckHandlerInterface;
 use App\Command\Resolve\Interface\CommandHandlerInterface;
-use App\Command\Resolve\Interface\ResponseInterface;
 
 class CommandHandler implements CommandHandlerInterface
 {

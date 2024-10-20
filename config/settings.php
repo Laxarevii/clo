@@ -7,20 +7,8 @@ return [
     'cloak' => [
         'block' => [
             'action' => 'curl',
-            'localPage' => [
-                'url' => '/',
-            ],
-            'redirect' => [
-                'status' => '303',
-                'urls' => [
-                    'https://f-store.com.ua/ua/p2356853408-shtany-softshell-multikam.html',
-                ],
-            ],
-            'curl' => [
-                'urls' => [
-                    'https://f-store.com.ua/ua/p2356853408-shtany-softshell-multikam.html',
-                ],
-            ],
+            'url' =>
+                'https://f-store.com.ua/ua/p2356853408-shtany-softshell-multikam.html',
             'handlers' => [
                 BotCheckHandler::class,
             ],
@@ -53,7 +41,7 @@ return [
                     'os' => [
                         Os::IOS,
                         Os::ANDROID,
-                        Os::OS_X,
+//                        Os::OS_X,
                     ],
                 ],
             ],

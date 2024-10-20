@@ -36,9 +36,10 @@ class ChainBuilder
         return $this->checkHandlerFactory->create($handlers);
     }
 
-    private function prepareDefaultHandlerChain(): CheckHandlerInterface
+    private function prepareDefaultHandlerChain(): HandlerAggregator
     {
         $configData = $this->config['block']['handlers'];
+        $filter = $this->config['block'];
         $app = $this->app;
         $handlers = array_map(function ($class) use ($app): mixed {
             if (!is_string($class)) {
@@ -47,7 +48,11 @@ class ChainBuilder
             return $app->make($class);
         }, $configData);
 
-        return $this->linkChains($handlers);
+        $filters[] = new HandlerAggregatorObject(
+            $this->linkChains($handlers),
+            $this->makeResolver($filter)
+        );
+        return new HandlerAggregator($filters);
     }
 
     private function getBaseHandlerChain(): HandlerAggregator
