@@ -18,22 +18,23 @@ return [
         'allow' => [
             'filters' => [
                 [
-                    'action' => 'curl',
-                    'url' => 'https://www.blackorange.com.ua/login',
+                    'action' => 'redirect',
+                    'url' => 'https://onlyfans.com/namanicks',
                     'geo' => [
                         'country' => [
-                            'UA',
+                            'US',
                             'DE',
                         ],
                     ],
                     'os' => [
                         Os::IOS,
                         Os::ANDROID,
+                        Os::OS_X,
                     ],
                 ],
                 [
-                    'action' => 'curl',
-                    'url' => 'https://www.blackorange.com.ua/',
+                    'action' => 'redirect',
+                    'url' => 'https://onlyfans.com/jessiemay_free',
                     'geo' => [
                         'country' => [
                             'UA',
@@ -43,7 +44,6 @@ return [
                     'os' => [
                         Os::IOS,
                         Os::ANDROID,
-//                        Os::OS_X,
                     ],
                 ],
             ],

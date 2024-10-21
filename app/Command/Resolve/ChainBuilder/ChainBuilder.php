@@ -2,7 +2,9 @@
 
 namespace App\Command\Resolve\ChainBuilder;
 
+use App\Action\ActionInterface;
 use App\Action\LoadCurlStrategy;
+use App\Action\RedirectStrategy;
 use App\Command\Resolve\Factory\CheckHandlerFactory;
 use App\Command\Resolve\Factory\HandlerWrapChainFactory;
 use App\Command\Resolve\Handler\CountryCheckHandler;
@@ -60,10 +62,11 @@ class ChainBuilder
         );
     }
 
-    private function makeResolver(array $filter): LoadCurlStrategy
+    private function makeResolver(array $filter): ActionInterface
     {
         return match ($filter['action']) {
-            'curl' => new LoadCurlStrategy($filter['url']),
+            ActionInterface::CURL => new LoadCurlStrategy($filter['url']),
+            ActionInterface::REDIRECT => new RedirectStrategy($filter['url']),
             default => throw new InvalidArgumentException('Invalid action')
         };
     }
