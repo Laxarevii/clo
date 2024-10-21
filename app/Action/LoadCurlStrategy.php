@@ -2,13 +2,19 @@
 
 namespace App\Action;
 
+use App\Services\Curl\CurlServiceInterface;
+use Exception;
+use Illuminate\Http\Response;
+
 class LoadCurlStrategy implements ActionInterface
 {
     private string $domain;
+    private CurlServiceInterface $curlService;
 
-    public function __construct(private string $localUrl)
+    public function __construct(private string $localUrl, CurlServiceInterface $curlService)
     {
         $this->domain = $this->extractDomainFromUrl($localUrl);
+        $this->curlService = $curlService;
     }
 
     private function extractDomainFromUrl(string $url): string
@@ -17,26 +23,18 @@ class LoadCurlStrategy implements ActionInterface
         return $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
     }
 
-    public function execute()
+    public function execute(): Response
     {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->localUrl);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-
-        $html = curl_exec($ch);
-
-        if (curl_errno($ch)) {
-            $errorMessage = curl_error($ch);
-            curl_close($ch);
-            return response()->json(['error' => $errorMessage], 500);
+        try {
+            $html = $this->curlService->execute($this->localUrl);
+        } catch (Exception $e) {
+            // Создаем ответ с кодом 500
+            return new Response($e->getMessage(), 500, ['Content-Type' => 'text/html']);
         }
-
-        curl_close($ch);
 
         $html = $this->convertRelativeUrlsToAbsolute($html);
 
-        return response($html, 200)->header('Content-Type', 'text/html');
+        return new Response($html, 200, ['Content-Type' => 'text/html']);
     }
 
     private function convertRelativeUrlsToAbsolute(string $html): string
@@ -53,4 +51,5 @@ class LoadCurlStrategy implements ActionInterface
 
         return preg_replace($patterns, $replacements, $html);
     }
+
 }

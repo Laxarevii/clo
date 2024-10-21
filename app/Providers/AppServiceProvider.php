@@ -20,6 +20,8 @@ use App\Command\Resolve\Interface\CommandHandlerInterface;
 use App\Config\Config;
 use App\Services\Checker\UserAgentChecker\UserAgentChecker;
 use App\Services\Checker\UserAgentChecker\UserAgentCheckerInterface;
+use App\Services\Curl\CurlService;
+use App\Services\Curl\CurlServiceInterface;
 use App\Services\Detector\BlockedIpDetector\BlockedIpDetectorInterface;
 use App\Services\Detector\BlockedIpDetector\FileBlockedIpDetector;
 use App\Services\Detector\BotDetector\BotDetectorInterface;
@@ -94,6 +96,7 @@ class AppServiceProvider extends ServiceProvider
             return new Config($settings);
         });
 
+        $this->app->bind(CurlServiceInterface::class, CurlService::class);
         $this->app->bind(LanguageDetectorInterface::class, LanguageDetector::class);
         $this->app->bind(OsDetectorInterface::class, OsDetector::class);
         $this->app->bind(CommandHandlerInterface::class, CommandHandler::class);

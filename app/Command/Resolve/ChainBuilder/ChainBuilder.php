@@ -3,7 +3,7 @@
 namespace App\Command\Resolve\ChainBuilder;
 
 use App\Action\ActionInterface;
-use App\Action\LoadCurlStrategy;
+use App\Action\Factory\LoadCurlStrategyFactory;
 use App\Action\RedirectStrategy;
 use App\Command\Resolve\Factory\CheckHandlerFactory;
 use App\Command\Resolve\Factory\HandlerWrapChainFactory;
@@ -59,10 +59,18 @@ class ChainBuilder
         );
     }
 
+    private function linkHandlerChains(array $handlers)
+    {
+        return ($this->app->get(CheckHandlerFactory::class))->create($handlers);
+    }
+
     private function makeResolver(array $filter): ActionInterface
     {
+        //FIXME
+        $loadCurlStrategyFactory = $this->app->get(LoadCurlStrategyFactory::class);
+        $redirectStrategyFactory = $this->app->get(RedirectStrategyFactory::class);
         return match ($filter['action']) {
-            ActionInterface::CURL => new LoadCurlStrategy($filter['url']),
+            ActionInterface::CURL => $loadCurlStrategyFactory->create($filter['url']),
             ActionInterface::REDIRECT => new RedirectStrategy($filter['url']),
             default => throw new InvalidArgumentException('Invalid action')
         };
@@ -94,10 +102,5 @@ class ChainBuilder
             $filters,
             $this->makeResolver($filter),
         );
-    }
-
-    private function linkHandlerChains(array $handlers)
-    {
-        return ($this->app->get(CheckHandlerFactory::class))->create($handlers);
     }
 }

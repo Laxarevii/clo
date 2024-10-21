@@ -29,6 +29,17 @@ class CloakController extends Controller
             ->execute();
     }
 
+    private function getCommand(Request $request): Command
+    {
+        return new Command(
+            $this->getAcceptLanguage($request),
+            $this->getUserAgent($request),
+            $this->getIp($request),
+            $this->getReferer($request),
+            $this->getUri($request),
+        );
+    }
+
     private function getAcceptLanguage(Request $request): AcceptLanguage
     {
         $acceptLanguage = $request->header('Accept-Language');
@@ -40,7 +51,6 @@ class CloakController extends Controller
         return new AcceptLanguage($acceptLanguage);
     }
 
-
     private function getUserAgent(Request $request): UserAgent
     {
         $userAgent = $request->header('User-Agent');
@@ -51,7 +61,6 @@ class CloakController extends Controller
 
         return new UserAgent($userAgent);
     }
-
 
     /** @psalm-suppress UnusedParam */
     private function getIp(Request $request): Ip
@@ -69,16 +78,5 @@ class CloakController extends Controller
     private function getUri(Request $request): Uri
     {
         return new Uri($request->getRequestUri());
-    }
-
-    private function getCommand(Request $request): Command
-    {
-        return new Command(
-            $this->getAcceptLanguage($request),
-            $this->getUserAgent($request),
-            $this->getIp($request),
-            $this->getReferer($request),
-            $this->getUri($request),
-        );
     }
 }
