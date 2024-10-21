@@ -21,6 +21,6 @@ class HandlerWrapChain extends AbstractHandlerWrapChain
         if ($res instanceof BadResponse) {
             return $this->action;
         }
-       return $this->nextHandler ? $this->nextHandler->handle($command) : $this->action;
+        return $this->nextHandler ? $this->nextHandler->handle($command) : $this->action;
     }
 }

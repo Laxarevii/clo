@@ -20,8 +20,7 @@ class BlockCommandServiceProvider extends ServiceProvider
                 /** @var Application $app */
                 return $app->get($class);
             },
-                config('settings.cloak.block.handlers')
-            );
+                config('settings.cloak.block.handlers'));
             $checkBlockHandlerFactory = $app->get(CheckBlockHandlerFactory::class);
             return new CommandHandlerFactory($checkBlockHandlerFactory->create($handlers));
         });

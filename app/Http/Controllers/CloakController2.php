@@ -30,5 +30,4 @@ class CloakController2 extends Controller
         return new Ip('89.209.161.249');
 //         return new Ip($request->ip());
     }
-
 }

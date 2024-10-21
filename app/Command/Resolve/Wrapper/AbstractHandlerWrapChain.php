@@ -2,7 +2,6 @@
 
 namespace App\Command\Resolve\Wrapper;
 
-
 abstract class AbstractHandlerWrapChain implements HandlerWrapChainInterface
 {
     protected ?HandlerWrapChainInterface $nextHandler = null;

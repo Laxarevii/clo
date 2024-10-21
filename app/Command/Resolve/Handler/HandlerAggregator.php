@@ -15,7 +15,7 @@ class HandlerAggregator extends AbstractCheckHandler
     {
     }
 
-    public function handle(Command $command):ResponseInterface
+    public function handle(Command $command): ResponseInterface
     {
         foreach ($this->handlers as $handler) {
             $res = $handler->handle($command);

@@ -2,7 +2,6 @@
 
 namespace App\Command\Resolve\Block\Handler;
 
-
 use App\Command\Resolve\Block\Interface\CheckBlockHandlerInterface;
 
 abstract class AbstractCheckHandler implements CheckBlockHandlerInterface
