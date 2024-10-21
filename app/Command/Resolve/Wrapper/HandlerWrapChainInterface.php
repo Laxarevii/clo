@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Command\Resolve\Interface;
+namespace App\Command\Resolve\Wrapper;
 
 use App\Action\ActionInterface;
 use App\Command\Resolve\Command;
+use App\Command\Resolve\Interface\CheckHandlerInterface;
 
-interface CommandHandlerInterface
+interface HandlerWrapChainInterface
 {
     public function handle(Command $command): ActionInterface;
 }

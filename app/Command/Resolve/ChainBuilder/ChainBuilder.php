@@ -4,11 +4,16 @@ namespace App\Command\Resolve\ChainBuilder;
 
 use App\Action\LoadCurlStrategy;
 use App\Command\Resolve\Factory\CheckHandlerFactory;
+use App\Command\Resolve\Factory\HandlerWrapChainFactory;
 use App\Command\Resolve\Handler\CountryCheckHandler;
 use App\Command\Resolve\Handler\HandlerAggregator;
 use App\Command\Resolve\Handler\HandlerAggregatorObject\HandlerAggregatorObject;
 use App\Command\Resolve\Handler\OsCheckHandler;
 use App\Command\Resolve\Interface\CheckHandlerInterface;
+use App\Command\Resolve\Wrapper\HandlerActionWrap;
+use App\Command\Resolve\Wrapper\HandlerAggregatorWrapChain;
+use App\Command\Resolve\Wrapper\HandlerWrapChain;
+use App\Command\Resolve\Wrapper\HandlerWrapChainInterface;
 use App\Services\Detector\CountryDetector\CountryDetectorInterface;
 use App\Services\Detector\OsDetector\OsDetectorInterface;
 use Illuminate\Foundation\Application;
@@ -19,11 +24,10 @@ class ChainBuilder
     public function __construct(
         private array $config,
         private Application $app,
-        private CheckHandlerFactory $checkHandlerFactory,
     ) {
     }
 
-    public function build(): CheckHandlerInterface
+    public function build(): HandlerWrapChainInterface
     {
         return $this->linkChains([
             $this->prepareDefaultHandlerChain(),
@@ -31,12 +35,12 @@ class ChainBuilder
         ]);
     }
 
-    private function linkChains(array $handlers): CheckHandlerInterface
+    private function linkChains(array $handlers): HandlerWrapChainInterface
     {
-        return $this->checkHandlerFactory->create($handlers);
+        return ($this->app->get(HandlerWrapChainFactory::class))->create($handlers);
     }
 
-    private function prepareDefaultHandlerChain(): HandlerAggregator
+    private function prepareDefaultHandlerChain(): HandlerWrapChainInterface
     {
         $configData = $this->config['block']['handlers'];
         $filter = $this->config['block'];
@@ -48,11 +52,12 @@ class ChainBuilder
             return $app->make($class);
         }, $configData);
 
-        $filters[] = new HandlerAggregatorObject(
-            $this->linkChains($handlers),
-            $this->makeResolver($filter)
+        $handlersChain = $this->linkHandlerChains($handlers);
+
+        return new HandlerWrapChain(
+            $handlersChain,
+            $this->makeResolver($filter),
         );
-        return new HandlerAggregator($filters);
     }
 
     private function makeResolver(array $filter): LoadCurlStrategy
@@ -63,7 +68,7 @@ class ChainBuilder
         };
     }
 
-    private function getBaseHandlerChain(): HandlerAggregator
+    private function getBaseHandlerChain(): HandlerWrapChainInterface
     {
         $filters = [];
         foreach ($this->config['allow']['filters'] as $filter) {
@@ -76,12 +81,20 @@ class ChainBuilder
                 $innerFilters[] =
                     new OsCheckHandler($filter['os'], $this->app->get(OsDetectorInterface::class));
             }
-            $innerFilters = $this->linkChains($innerFilters);
-            $filters[] = new HandlerAggregatorObject(
-                $innerFilters,
-                $this->makeResolver($filter)
+            $filters[] = new HandlerActionWrap(
+                $this->linkHandlerChains($innerFilters),
+                $this->makeResolver($filter),
             );
         }
-        return new HandlerAggregator($filters);
+        $filter = $this->config['block'];
+        return new HandlerAggregatorWrapChain(
+            $filters,
+            $this->makeResolver($filter),
+        );
+    }
+
+    private function linkHandlerChains(array $handlers)
+    {
+        return ($this->app->get(CheckHandlerFactory::class))->create($handlers);
     }
 }

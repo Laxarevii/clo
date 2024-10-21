@@ -56,6 +56,9 @@ use Psr\Http\Client\ClientInterface;
 use RuntimeException;
 use UnexpectedValueException;
 
+/**
+ *
+ */
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -381,12 +384,12 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(CommandHandler::class, function (Application $app): CommandHandler {
-
+            /** @var ChainBuilder $builder */
             $builder = $app->get(ChainBuilder::class);
 
-            $handler = $builder->build();
-
-            return new CommandHandler($handler);
+            return new CommandHandler(
+                $builder->build(),
+            );
         });
 
         $this->app->singleton(OsDetector::class, function (Application $app): OsDetector {

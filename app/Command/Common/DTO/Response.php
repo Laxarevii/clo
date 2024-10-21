@@ -3,7 +3,8 @@
 namespace App\Command\Common\DTO;
 
 
-use App\Command\Resolve\Block\Interface\ResponseInterface;
+
+use App\Command\Resolve\Interface\ResponseInterface;
 
 abstract class Response implements ResponseInterface
 {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Command\Resolve\Handler\BotCheckHandler;
+use App\Command\Resolve\Handler\IpCheckHandler;
 use App\Entity\Os;
 
 return [
@@ -8,16 +9,17 @@ return [
         'block' => [
             'action' => 'curl',
             'url' =>
-                'https://f-store.com.ua/ua/p2356853408-shtany-softshell-multikam.html',
+                'https://google.com',
             'handlers' => [
                 BotCheckHandler::class,
+                IpCheckHandler::class,
             ],
         ],
         'allow' => [
             'filters' => [
                 [
                     'action' => 'curl',
-                    'url' => 'https://f-store.com.ua',
+                    'url' => 'https://www.blackorange.com.ua/login',
                     'geo' => [
                         'country' => [
                             'UA',
@@ -31,7 +33,7 @@ return [
                 ],
                 [
                     'action' => 'curl',
-                    'url' => 'https://f-store.com.ua',
+                    'url' => 'https://www.blackorange.com.ua/',
                     'geo' => [
                         'country' => [
                             'UA',

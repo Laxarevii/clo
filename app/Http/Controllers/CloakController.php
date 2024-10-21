@@ -24,16 +24,9 @@ class CloakController extends Controller
 
     public function resolve(Request $request)
     {
-        return $this->commandHandler->handle(
-            new Command(
-                $this->getAcceptLanguage($request),
-                $this->getUserAgent($request),
-                $this->getIp($request),
-                $this->getReferer($request),
-                $this->getUri($request),
-            )
-        );
-        return $this->resolver->resolve($result);
+        return $this->commandHandler
+            ->handle($this->getCommand($request))
+            ->execute();
     }
 
     private function getAcceptLanguage(Request $request): AcceptLanguage
@@ -76,5 +69,16 @@ class CloakController extends Controller
     private function getUri(Request $request): Uri
     {
         return new Uri($request->getRequestUri());
+    }
+
+    private function getCommand(Request $request): Command
+    {
+        return new Command(
+            $this->getAcceptLanguage($request),
+            $this->getUserAgent($request),
+            $this->getIp($request),
+            $this->getReferer($request),
+            $this->getUri($request),
+        );
     }
 }
