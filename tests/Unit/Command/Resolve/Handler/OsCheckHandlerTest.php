@@ -3,7 +3,7 @@
 namespace Tests\Unit\Command\Resolve\Handler;
 namespace Tests\Unit\Command\Resolve\Handler;
 
-use App\Command\CheckBlock\Interface\CheckHandlerInterface;
+use App\Command\Resolve\Interface\CheckHandlerInterface;
 use App\Command\Common\DTO\BadResponse;
 use App\Command\Common\DTO\SuccessResponse;
 use App\Command\Resolve\Command;

@@ -2,12 +2,15 @@
 
 namespace App\Providers;
 
+use App\Action\Factory\LoadCurlStrategyFactory;
 use App\Action\LoadCurlStrategy;
 use App\Action\LoadLocalPageStrategy;
 use App\Action\RedirectStrategy;
 use App\Command\Resolve\ChainBuilder\ChainBuilder;
 use App\Command\Resolve\CommandHandler;
 use App\Command\Resolve\Factory\CheckHandlerFactory;
+use App\Command\Resolve\Factory\HandlersFactory;
+use App\Command\Resolve\Factory\HandlerWrapChainFactory;
 use App\Command\Resolve\Handler\CountryCheckHandler;
 use App\Command\Resolve\Handler\IspCheckHandler;
 use App\Command\Resolve\Handler\LanguageCheckHandler;
@@ -168,8 +171,12 @@ class AppServiceProvider extends ServiceProvider
             $config = config('settings.cloak');
             return new ChainBuilder(
                 $config,
-                $app,
-                $app->get(CheckHandlerFactory::class)
+                $app->get(HandlerWrapChainFactory::class),
+                $app->get(HandlersFactory::class),
+                $app->get(LoadCurlStrategyFactory::class),
+                $app->get(CheckHandlerFactory::class),
+                $app->get(OsDetectorInterface::class),
+                $app->get(CountryDetectorInterface::class),
             );
         });
         $this->app->singleton(AllowActionResolver::class, function (Application $app) {

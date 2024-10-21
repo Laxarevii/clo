@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Command\Resolve;
 
-use App\Command\CheckBlock\Interface\CheckHandlerInterface;
+use App\Command\Resolve\Interface\CheckHandlerInterface;
 use App\Command\Common\DTO\Response;
 use App\Command\Resolve\Command;
 use App\Command\Resolve\CommandHandler;

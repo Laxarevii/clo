@@ -20,12 +20,12 @@ return [
                 [
                     'action' => 'redirect',
                     'url' => 'https://onlyfans.com/namanicks',
-                    'geo' => [
-                        'country' => [
-                            'US',
-                            'DE',
-                        ],
-                    ],
+//                    'geo' => [
+//                        'country' => [
+//                            'US',
+//                            'DE',
+//                        ],
+//                    ],
                     'os' => [
                         Os::IOS,
                         Os::ANDROID,
