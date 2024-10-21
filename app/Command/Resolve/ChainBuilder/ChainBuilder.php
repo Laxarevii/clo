@@ -68,7 +68,6 @@ class ChainBuilder
     {
         //FIXME
         $loadCurlStrategyFactory = $this->app->get(LoadCurlStrategyFactory::class);
-        $redirectStrategyFactory = $this->app->get(RedirectStrategyFactory::class);
         return match ($filter['action']) {
             ActionInterface::CURL => $loadCurlStrategyFactory->create($filter['url']),
             ActionInterface::REDIRECT => new RedirectStrategy($filter['url']),

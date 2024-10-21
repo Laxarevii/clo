@@ -142,14 +142,14 @@ class AppServiceProvider extends ServiceProvider
             $config = $app->get(Config::class);
             $urls = $config->get('black')['landing']['curl']['urls'];
             $key = array_rand($urls);
-            return new LoadCurlStrategy($urls[$key]);
+            return new LoadCurlStrategy($urls[$key], $app->get(CurlServiceInterface::class));
         });
         $this->app->singleton('BlockLoadCurlStrategy', function (Application $app) {
             /** @var Config $config */
             $config = $app->get(Config::class);
             $urls = $config->get('white')['curl']['urls'];
             $key = array_rand($urls);
-            return new LoadCurlStrategy($urls[$key]);
+            return new LoadCurlStrategy($urls[$key], $app->get(CurlServiceInterface::class));
         });
         $this->app->singleton('BlockLoadLocalPageStrategy', function (Application $app) {
             /** @var Config $config */

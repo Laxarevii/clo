@@ -3,7 +3,7 @@
 namespace App\Action;
 
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 
 class RedirectStrategy implements ActionInterface
 {
@@ -15,6 +15,6 @@ class RedirectStrategy implements ActionInterface
 
     public function execute(): RedirectResponse
     {
-        return Redirect::to($this->url, $this->status);
+        return new RedirectResponse(URL::to($this->url), $this->status);
     }
 }

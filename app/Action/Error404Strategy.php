@@ -9,6 +9,6 @@ class Error404Strategy implements ActionInterface
 {
     public function execute(): JsonResponse
     {
-        return response()->json(['error' => 'Not Found'], Response::HTTP_NOT_FOUND);
+        return new JsonResponse(['error' => 'Not Found'], Response::HTTP_NOT_FOUND);
     }
 }

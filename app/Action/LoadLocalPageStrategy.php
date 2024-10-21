@@ -4,6 +4,7 @@ namespace App\Action;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 
 class LoadLocalPageStrategy implements ActionInterface
 {
@@ -14,6 +15,6 @@ class LoadLocalPageStrategy implements ActionInterface
 
     public function execute(): RedirectResponse
     {
-        return Redirect::to($this->localUrl);
+        return new RedirectResponse(URL::to($this->localUrl),200);
     }
 }
