@@ -75,7 +75,10 @@ class ChainBuilder
             $innerFilters = [];
             if (isset($filter['geo']['country'])) {
                 $innerFilters[] =
-                    new CountryCheckHandler($filter['geo']['country'], $this->app->get(CountryDetectorInterface::class));
+                    new CountryCheckHandler(
+                        $filter['geo']['country'],
+                        $this->app->get(CountryDetectorInterface::class)
+                    );
             }
             if (isset($filter['os'])) {
                 $innerFilters[] =
